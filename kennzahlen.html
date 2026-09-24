@@ -991,6 +991,290 @@
 }
 #bmk-dash .pdf-stand{display:none;font-size:10.5px;color:var(--ink-3);margin-top:6px}
 /* ============================================================
+   Ø-Fahrgast „Bob“
+   Bühne mit Bob in der Mitte, Kanal-Mix-Ring dahinter, schwebenden
+   Kanalkarten links und rechts und einer Sprechblase am Kopf.
+   ============================================================ */
+#bmk-dash .bob{margin-bottom:14px}
+#bmk-dash .bob-buehne{
+  position:relative;height:720px;padding:0;overflow:hidden;border-radius:26px;margin-bottom:14px;
+  background:
+    radial-gradient(60% 55% at 50% 42%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 70%),
+    radial-gradient(90% 80% at 85% 0%, rgba(27,89,248,.10), transparent 60%),
+    radial-gradient(80% 70% at 0% 100%, rgba(27,89,248,.08), transparent 60%),
+    linear-gradient(180deg,#f7f9ff 0%,#eef3ff 100%);
+  animation:bmk-in .5s cubic-bezier(.2,.7,.3,1) backwards;
+}
+#bmk-dash .bob-buehne:hover{transform:none;box-shadow:0 5px 20px rgba(0,0,0,.05);border-color:var(--line)}
+#bmk-dash .bob-bereich{position:absolute;inset:0;overflow:hidden;border-radius:inherit}
+
+/* Liniennetz im Hintergrund, wie auf der Anmeldeseite */
+#bmk-dash .bob-netz{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#bmk-dash .bob-netz path{fill:none;stroke:rgba(27,89,248,.08);stroke-width:2;stroke-linecap:round}
+#bmk-dash .bob-netz circle{fill:#f4f7ff;stroke:rgba(27,89,248,.14);stroke-width:2}
+#bmk-dash .bob-netz .fahrt{stroke:rgba(27,89,248,.22);stroke-width:2.4;stroke-dasharray:34 1400;animation:tor-fahrt 11s linear infinite}
+#bmk-dash .bob-netz .fahrt.zwei{animation-duration:15s;animation-delay:-6s}
+
+/* Bob samt Ring, Scheibe und Sprechblase bewegen sich gemeinsam */
+#bmk-dash .bob-zentrum{position:absolute;top:0;bottom:0;left:50%;width:0;transition:left .7s cubic-bezier(.2,.7,.3,1)}
+#bmk-dash .bob-scheibe{
+  position:absolute;left:0;top:47%;height:76%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 38%, #ffffff 0%, rgba(255,255,255,.9) 38%, rgba(222,231,255,.55) 64%, rgba(222,231,255,0) 71%);
+}
+#bmk-dash .bob-ring{
+  position:absolute;left:0;top:47%;height:84%;aspect-ratio:1;transform:translate(-50%,-50%);
+  overflow:visible;pointer-events:none;animation:bob-ring-rein 1.2s .2s cubic-bezier(.2,.7,.3,1) backwards;
+}
+#bmk-dash .bob-ring g{transform-origin:50px 50px;animation:bob-ring 150s linear infinite}
+#bmk-dash .bob-ring circle{fill:none;stroke-width:1.5;stroke-linecap:round;transition:opacity .3s,stroke-width .3s}
+#bmk-dash .bob-ring .ring-spur{stroke:rgba(27,89,248,.09);stroke-width:1.1}
+#bmk-dash .bob-ring .ring-seg{pointer-events:visibleStroke;cursor:default}
+#bmk-dash .bob.mix-fokus .ring-seg{opacity:.18}
+#bmk-dash .bob.mix-fokus .ring-seg.aktiv{opacity:1;stroke-width:2.3}
+#bmk-dash .bob.mix-fokus .bob-ring g{animation-play-state:paused}
+@keyframes bob-ring{to{transform:rotate(360deg)}}
+@keyframes bob-ring-rein{from{opacity:0;transform:translate(-50%,-50%) scale(.9) rotate(-40deg)}to{opacity:1;transform:translate(-50%,-50%)}}
+
+#bmk-dash .bob-figur{
+  position:absolute;left:0;bottom:0;height:94%;aspect-ratio:880/1168;transform:translateX(-50%);
+  animation:bob-rein 1s .1s cubic-bezier(.2,.7,.3,1) backwards;
+}
+@keyframes bob-rein{from{opacity:0;transform:translate(-50%,28px)}to{opacity:1;transform:translate(-50%,0)}}
+#bmk-dash .bob-figur canvas,#bmk-dash .bob-figur img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+#bmk-dash .bob-figur img{object-fit:contain;transform-origin:50% 60%;opacity:0;transition:opacity .5s}
+#bmk-dash .bob-figur.da img{opacity:1}
+#bmk-dash .bob-figur.gl img{opacity:0}
+#bmk-dash .bob-figur:not(.gl) canvas{display:none}
+#bmk-dash .bob-figur canvas{opacity:0;transition:opacity .6s}
+#bmk-dash .bob-figur.gl canvas{opacity:1}
+
+/* Sprechblase rechts neben dem Kopf */
+#bmk-dash .bob-blase{
+  position:absolute;right:61%;top:-2%;z-index:6;width:204px;padding:10px 14px 13px;cursor:pointer;
+  background:rgba(255,255,255,.96);border:1px solid #e3e8f6;border-radius:18px 18px 5px 18px;
+  box-shadow:0 16px 36px rgba(18,32,74,.12);font-size:13px;line-height:1.45;color:var(--ink);
+  animation:bob-blase-rein .7s .9s cubic-bezier(.2,.7,.3,1) backwards;
+}
+/* Zipfel unten rechts, zeigt auf Bobs Gesicht */
+#bmk-dash .bob-blase::before{
+  content:"";position:absolute;right:-7px;bottom:12px;width:14px;height:14px;background:inherit;
+  border-right:1px solid #e3e8f6;border-top:1px solid #e3e8f6;transform:rotate(45deg);border-radius:0 3px 0 0;
+}
+@keyframes bob-blase-rein{from{opacity:0;transform:translateY(8px) scale(.94)}to{opacity:1;transform:none}}
+#bmk-dash .bob-blase-kanal{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:3px;transition:opacity .26s}
+#bmk-dash .bob-blase-kanal i{width:7px;height:7px;border-radius:50%;background:var(--farbe);flex:0 0 7px}
+#bmk-dash .bob-blase-text{display:block;position:relative;transition:opacity .26s,transform .26s}
+#bmk-dash .bob-blase .raus{opacity:0;transform:translateY(4px)}
+#bmk-dash .bob-blase-fort{position:absolute;left:14px;right:14px;bottom:6px;height:2px;border-radius:2px;background:#eef1f8;overflow:hidden}
+#bmk-dash .bob-blase-fort i{display:block;height:100%;width:100%;background:rgba(27,89,248,.45);transform-origin:left;transform:scaleX(0)}
+#bmk-dash .bob-blase.laeuft .bob-blase-fort i{animation:bob-fort 6.5s linear forwards}
+#bmk-dash .bob-blase:hover .bob-blase-fort i{animation-play-state:paused}
+@keyframes bob-fort{to{transform:scaleX(1)}}
+
+/* Kanalkarten */
+#bmk-dash .bob-karten{position:absolute;inset:0;z-index:5;pointer-events:none}
+#bmk-dash .bob-karte{
+  position:absolute;top:var(--y);width:238px;pointer-events:auto;
+  display:flex;flex-direction:column;align-items:stretch;gap:0;padding:12px 15px 11px;
+  font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:18px;
+  background:rgba(255,255,255,.84);-webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2);
+  border:1px solid rgba(221,228,246,.95);box-shadow:0 12px 30px rgba(18,32,74,.08);
+  transition:scale .28s cubic-bezier(.2,.7,.3,1),box-shadow .28s,border-color .28s,opacity .35s,filter .35s;
+  animation:bob-karte-rein .7s cubic-bezier(.2,.7,.3,1) backwards;animation-delay:calc(.45s + var(--i) * .08s);
+}
+#bmk-dash .bob-karte.links{left:18px}
+#bmk-dash .bob-karte.rechts{right:18px}
+#bmk-dash .bob-buehne.ruhig .bob-karte{animation:none}
+@keyframes bob-karte-rein{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:none}}
+#bmk-dash .bob-karte:hover,#bmk-dash .bob-karte.hervor{
+  scale:1.035;border-color:#c9d5f3;border-color:color-mix(in srgb, var(--farbe) 38%, #dde4f6);
+  box-shadow:0 22px 46px rgba(18,32,74,.15);
+}
+#bmk-dash .bob-karte.erzaehlt:not(.hervor){border-color:#cfd9f4;border-color:color-mix(in srgb, var(--farbe) 30%, #dde4f6)}
+#bmk-dash .bob.mix-fokus .bob-karte:not(.hervor){opacity:.5}
+#bmk-dash .bob-karte:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+#bmk-dash .bk-kopf{display:flex;align-items:center;gap:7px;min-width:0;font-size:12px;font-weight:600;color:var(--ink-2)}
+#bmk-dash .bk-punkt{width:8px;height:8px;border-radius:50%;background:var(--farbe);flex:0 0 8px}
+#bmk-dash .bk-kopf .kicon{width:16px;height:16px;flex-basis:16px}
+#bmk-dash .bk-kopf .kicon svg{width:16px;height:16px}
+#bmk-dash .bk-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bmk-dash .bk-trend{margin-left:auto;flex:0 0 auto;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap}
+#bmk-dash .bk-trend.up{color:#0f9c62;background:rgba(31,224,143,.14)}
+#bmk-dash .bk-trend.down{color:var(--down);background:rgba(255,62,19,.09)}
+#bmk-dash .bk-trend.flat{color:var(--ink-3);background:#f0f2f6}
+#bmk-dash .bk-wert{font-size:27px;font-weight:700;letter-spacing:-.9px;line-height:1.15;color:var(--ink);margin-top:8px}
+#bmk-dash .bk-label{font-size:12px;color:var(--ink-3);line-height:1.35}
+#bmk-dash .bk-neben{font-size:12.5px;font-weight:500;color:var(--ink-2);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bmk-dash .bk-fuss{display:flex;align-items:center;gap:8px;margin-top:9px;padding-top:8px;border-top:1px solid rgba(225,230,244,.9);font-size:11.5px;color:var(--ink-3)}
+#bmk-dash .bk-rw{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bmk-dash .bk-mehr{margin-left:auto;display:inline-flex;align-items:center;gap:1px;color:var(--blue);font-weight:600;white-space:nowrap}
+#bmk-dash .bk-mehr svg{width:13px;height:13px;transition:transform .2s}
+#bmk-dash .bob-karte:hover .bk-mehr svg{transform:translateX(2px)}
+#bmk-dash .bob-karte.leer{cursor:pointer}
+#bmk-dash .bk-leer{font-size:12.5px;color:var(--ink-3);margin-top:10px;line-height:1.45}
+
+#bmk-dash .bob-hinweis{
+  position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:4;white-space:nowrap;
+  font-size:11.5px;color:var(--ink-3);background:rgba(255,255,255,.75);padding:4px 11px;border-radius:20px;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  animation:bob-blase-rein .6s 1.6s cubic-bezier(.2,.7,.3,1) backwards;transition:opacity .3s;
+}
+
+/* Detailansicht: Bob rückt zur Seite, das Blatt kommt von rechts */
+#bmk-dash .bob-buehne.detail-offen .bob-zentrum{left:30%}
+#bmk-dash .bob-buehne.detail-offen .bob-karte{opacity:0;pointer-events:none;filter:blur(2px)}
+#bmk-dash .bob-buehne.detail-offen .bob-hinweis{opacity:0}
+#bmk-dash .bob-huelle{position:absolute;inset:0;z-index:20;display:flex;justify-content:flex-end;padding:18px}
+#bmk-dash .bob-huelle[hidden]{display:none}
+#bmk-dash .bob-detail{
+  width:min(560px,56%);max-height:100%;overflow-y:auto;overscroll-behavior:contain;
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px 22px 16px;
+  box-shadow:0 34px 80px rgba(12,24,60,.22),0 4px 14px rgba(12,24,60,.06);
+  opacity:0;transform:translateX(34px) scale(.98);transition:opacity .32s,transform .45s cubic-bezier(.2,.7,.3,1);
+}
+#bmk-dash .bob-huelle.an .bob-detail{opacity:1;transform:none}
+#bmk-dash .bob-detail:focus{outline:none}
+#bmk-dash .bob-detail::-webkit-scrollbar{width:8px}
+#bmk-dash .bob-detail::-webkit-scrollbar-thumb{background:#e2e5ee;border-radius:20px}
+#bmk-dash .bd-kopf{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+#bmk-dash .bd-icon{flex:0 0 40px;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;
+  color:var(--farbe);background:#eef3ff;background:color-mix(in srgb, var(--farbe) 12%, #fff)}
+#bmk-dash .bd-icon svg{width:21px;height:21px}
+#bmk-dash .bd-titel{min-width:0}
+#bmk-dash .bd-titel h3{font-size:17px;font-weight:700;letter-spacing:-.3px;line-height:1.25}
+#bmk-dash .bd-titel span{font-size:12px;color:var(--ink-3)}
+#bmk-dash .bd-zu{margin-left:auto;align-self:flex-start;width:32px;height:32px;border:0;border-radius:10px;background:#f3f5f9;
+  color:var(--ink-2);cursor:pointer;display:grid;place-items:center;transition:background .15s,color .15s}
+#bmk-dash .bd-zu:hover{background:#e8ecf4;color:var(--ink)}
+#bmk-dash .bd-zu svg{width:15px;height:15px}
+#bmk-dash .bd-verhalten{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+#bmk-dash .bd-verhalten div{background:var(--blue-faint);border-radius:14px;padding:10px 11px;min-width:0}
+#bmk-dash .bd-verhalten b{display:block;font-size:18px;font-weight:700;letter-spacing:-.4px;color:var(--ink);line-height:1.25}
+#bmk-dash .bd-verhalten span{display:block;font-size:11px;color:var(--ink-3);line-height:1.35;margin-top:2px}
+#bmk-dash .bd-reichweite{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:center;
+  border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+#bmk-dash .bd-klein{display:block;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3)}
+#bmk-dash .bd-rw b{display:block;font-size:22px;font-weight:700;letter-spacing:-.6px;color:var(--ink);margin-top:2px}
+#bmk-dash .bd-rw span:last-child{display:block;font-size:11.5px;color:var(--ink-3);line-height:1.35}
+#bmk-dash .bd-spark{position:relative;height:66px;padding-bottom:18px}
+#bmk-dash .bd-spark svg{display:block;width:100%;height:100%;overflow:visible}
+#bmk-dash .bd-spark .f{fill:rgba(27,89,248,.09)}
+#bmk-dash .bd-spark .l{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+#bmk-dash .bd-spark.leer{display:flex;align-items:center;font-size:12px;color:var(--ink-3);height:auto;padding:0}
+#bmk-dash .bd-punkt{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 2px #fff}
+#bmk-dash .bd-spark .bd-punkt{top:0}
+#bmk-dash .bd-achse{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+#bmk-dash .bd-trend{font-size:12px;margin:9px 2px 0;color:var(--ink-3)}
+#bmk-dash .bd-trend.up{color:#0f9c62}
+#bmk-dash .bd-trend.down{color:var(--down)}
+#bmk-dash .bd-block{margin-top:14px}
+#bmk-dash .bd-block h4{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+#bmk-dash .bd-block dl{display:flex;flex-direction:column}
+#bmk-dash .bd-block dl div{display:flex;gap:14px;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+#bmk-dash .bd-block dl div:last-child{border-bottom:0}
+#bmk-dash .bd-block dt{color:var(--ink-3)}
+#bmk-dash .bd-block dd{color:var(--ink);font-weight:600;text-align:right}
+#bmk-dash .bd-block ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+#bmk-dash .bd-block li{position:relative;padding-left:16px;font-size:13px;color:var(--ink-2);line-height:1.45}
+#bmk-dash .bd-block li::before{content:"";position:absolute;left:3px;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+#bmk-dash .bd-fuss{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3)}
+#bmk-dash .bd-kanal{margin-left:auto;display:inline-flex;align-items:center;gap:7px;border:0;border-radius:12px;padding:9px 14px;
+  background:var(--blue);color:#fff;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:box-shadow .16s,transform .16s}
+#bmk-dash .bd-kanal:hover{box-shadow:0 10px 24px rgba(27,89,248,.28);transform:translateY(-1px)}
+#bmk-dash .bd-kanal svg{width:15px;height:15px}
+
+/* Unter der Bühne: Bobs Tag und Kanal-Mix */
+#bmk-dash .bob-tag{grid-column:1 / span 8}
+#bmk-dash .bob-mix{grid-column:9 / span 4}
+#bmk-dash .bob-unten.still > *{animation:none}
+#bmk-dash .bt-satz{font-size:14px;font-weight:500;color:var(--ink);line-height:1.5;margin:-4px 0 16px}
+#bmk-dash .bt-raster{position:relative;display:flex;flex-direction:column;gap:9px}
+#bmk-dash .bt-kopf,#bmk-dash .bt-zeile{display:grid;grid-template-columns:132px minmax(0,1fr) 54px;align-items:center;gap:12px}
+#bmk-dash .bt-achse{position:relative;height:16px}
+#bmk-dash .bt-achse > span:not(.bt-phase){position:absolute;top:0;transform:translateX(-50%);font-size:10.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+#bmk-dash .bt-achse > span:first-child{transform:none}
+#bmk-dash .bt-achse > span:nth-last-child(2){transform:translateX(-100%)}
+#bmk-dash .bt-kopf .bt-spitze{font-size:10.5px;color:var(--ink-3);font-weight:500}
+#bmk-dash .bt-name{display:flex;align-items:center;gap:8px;min-width:0;font-size:13px;font-weight:500;color:var(--ink-2)}
+#bmk-dash .bt-name > span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bmk-dash .bt-streifen{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;height:30px}
+#bmk-dash .bt-zelle{position:relative;border-radius:5px;background:rgba(27,89,248,var(--a));transition:transform .15s}
+#bmk-dash .bt-zelle:hover{transform:scaleY(1.12);z-index:3}
+#bmk-dash .bt-zelle.spitze::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#fff}
+#bmk-dash .bt-zelle .tip{
+  position:absolute;left:50%;bottom:calc(100% + 7px);z-index:6;background:var(--ink);color:#fff;font-style:normal;
+  font-size:11px;font-weight:600;white-space:nowrap;padding:4px 8px;border-radius:6px;opacity:0;pointer-events:none;
+  transform:translate(-50%,4px);transition:opacity .15s,transform .15s;
+}
+#bmk-dash .bt-zelle:hover .tip{opacity:1;transform:translate(-50%,0)}
+#bmk-dash .bt-zelle:nth-child(-n+3) .tip{left:0;transform:translate(0,4px)}
+#bmk-dash .bt-zelle:nth-child(-n+3):hover .tip{transform:translate(0,0)}
+#bmk-dash .bt-zelle:nth-last-child(-n+3) .tip{left:auto;right:0;transform:translate(0,4px)}
+#bmk-dash .bt-zelle:nth-last-child(-n+3):hover .tip{transform:translate(0,0)}
+#bmk-dash .bt-zeile .bt-spitze{font-size:12.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+#bmk-dash .bt-zeile{transition:opacity .25s}
+#bmk-dash .bob.mix-fokus .bt-zeile:not(.aktiv){opacity:.4}
+/* „jetzt“: senkrechte Linie über alle Zeilen */
+#bmk-dash .bt-jetzt{position:absolute;top:18px;bottom:-4px;left:calc(144px + (100% - 210px) * var(--pos,0));
+  width:0;pointer-events:none;z-index:4}
+#bmk-dash .bt-jetzt i{position:absolute;top:0;bottom:0;left:-1px;width:2px;border-radius:2px;background:var(--ink);opacity:.75}
+#bmk-dash .bt-jetzt b{position:absolute;bottom:-18px;left:0;transform:translateX(-50%);font-size:10.5px;font-weight:700;color:var(--ink);white-space:nowrap}
+#bmk-dash .bt-nun{font-size:12.5px;color:var(--ink-2);margin-top:26px}
+#bmk-dash .bt-woche{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+#bmk-dash .bt-titel{font-size:13.5px;font-weight:600;color:var(--ink-3)!important;margin-bottom:6px}
+#bmk-dash .bt-woche-satz{font-size:13px;color:var(--ink);margin-bottom:12px}
+#bmk-dash .bt-streifen.sieben{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;height:34px}
+#bmk-dash .bt-streifen.sieben .bt-zelle{border-radius:8px;display:grid;place-items:center}
+#bmk-dash .bt-streifen.sieben em{font-style:normal;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.92);
+  mix-blend-mode:normal;text-shadow:0 0 2px rgba(0,0,0,.18)}
+#bmk-dash .bt-streifen.sieben .bt-zelle.hell em{color:var(--ink-2);text-shadow:none}
+#bmk-dash .bt-streifen.sieben .bt-zelle.spitze::after{top:auto;bottom:4px;margin-top:0}
+
+#bmk-dash .bm-liste{list-style:none;display:flex;flex-direction:column;gap:12px}
+#bmk-dash .bm-liste li{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:3px 9px;align-items:center;
+  padding:5px 8px;margin:-5px -8px;border-radius:12px;cursor:default;transition:background .15s,opacity .25s;outline:none}
+#bmk-dash .bm-liste li:hover,#bmk-dash .bm-liste li:focus-visible,#bmk-dash .bm-liste li.aktiv{background:var(--blue-faint)}
+#bmk-dash .bob.mix-fokus .bm-liste li:not(.aktiv){opacity:.5}
+#bmk-dash .bm-punkt{width:10px;height:10px;border-radius:3px;background:var(--farbe)}
+#bmk-dash .bm-name{font-size:13px;font-weight:500;color:var(--ink-2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bmk-dash .bm-wert{font-size:13px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+#bmk-dash .bm-bahn{grid-column:2 / span 2;height:6px;border-radius:6px;background:#f0f3fa;overflow:hidden}
+#bmk-dash .bm-bahn span{display:block;height:100%;width:0;border-radius:6px;background:var(--farbe);transition:width .9s cubic-bezier(.2,.7,.3,1)}
+#bmk-dash .bm-liste small{grid-column:2 / span 2;font-size:11px;color:var(--ink-3)}
+
+/* Schmale Bühne: Bob oben, Karten darunter im Raster */
+#bmk-dash .bob-buehne.eng{height:auto}
+#bmk-dash .bob-buehne.eng .bob-bereich{position:relative;height:460px}
+#bmk-dash .bob-buehne.eng .bob-karten{position:relative;inset:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:12px;padding:0 16px 16px;pointer-events:auto}
+#bmk-dash .bob-buehne.eng .bob-karte{position:relative;top:auto;left:auto;right:auto;width:auto;translate:none}
+#bmk-dash .bob-buehne.eng .bob-blase{right:58%;width:180px;font-size:12.5px}
+#bmk-dash .bob-buehne.eng .bob-hinweis{display:none}
+#bmk-dash .bob-buehne.eng .bob-huelle{position:absolute;padding:10px}
+#bmk-dash .bob-buehne.eng .bob-detail{width:100%}
+#bmk-dash .bob-buehne.eng.detail-offen .bob-zentrum{left:50%}
+@media (max-width:1180px){
+  #bmk-dash .bob-tag,#bmk-dash .bob-mix{grid-column:1 / span 12}
+}
+@media (max-width:560px){
+  #bmk-dash .bd-verhalten{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #bmk-dash .bd-reichweite{grid-template-columns:1fr}
+  #bmk-dash .bt-kopf,#bmk-dash .bt-zeile{grid-template-columns:92px minmax(0,1fr) 44px;gap:8px}
+  #bmk-dash .bt-jetzt{left:calc(100px + (100% - 152px) * var(--pos,0))}
+}
+@media (prefers-reduced-motion:reduce){
+  #bmk-dash .bob-ring g,#bmk-dash .bob-netz .fahrt{animation:none}
+}
+@media print{
+  #bmk-dash .bob-buehne{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  #bmk-dash .bob-figur canvas{display:none}
+  #bmk-dash .bob-figur img{opacity:1!important;transform:none!important}
+  #bmk-dash .bob-karte{translate:none!important;animation:none!important}
+  #bmk-dash .bob-hinweis,#bmk-dash .bob-huelle{display:none!important}
+}
+/* ============================================================
    Export-Dialog. Liegt bewusst am <body> und nicht in #bmk-dash,
    weil das Dashboard overflow:hidden und runde Ecken hat. Deshalb
    eigene Variablen statt der Kaskade von oben.
@@ -1217,6 +1501,10 @@
       <button class="navitem" data-view="overview" aria-current="page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
         Alle Kanäle
+      </button>
+      <button class="navitem" data-view="persona">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.6" r="3.6"/><path d="M4.8 20.5c.7-3.9 3.6-6.3 7.2-6.3s6.5 2.4 7.2 6.3"/></svg>
+        Ø-Fahrgast
       </button>
     </nav>
 
@@ -5994,7 +6282,7 @@ function alsPdf(){
   const zeile = document.getElementById("pdf-stand");
   const k = kanalInfo();
   if(zeile){
-    const teile = ["Kennzahlen BMK", k ? k.titel : "Alle Kanäle"];
+    const teile = ["Kennzahlen BMK", k ? k.titel : (state.view === "persona" ? "Ø-Fahrgast" : "Alle Kanäle")];
     if(k && state[k.monatFeld]) teile.push(monatsName(state[k.monatFeld]));
     teile.push("Stand " + new Date().toLocaleDateString("de-DE",
       {day:"2-digit", month:"long", year:"numeric"}));
@@ -6002,6 +6290,1181 @@ function alsPdf(){
   }
   window.print();
 }
+
+/* ============================================================
+   13b. Ø-FAHRGAST „BOB" — WERTE
+
+   Bob steht für den durchschnittlichen DSW21-Fahrgast. Je Kanal wird
+   über die letzten zwölf Monate bis zum jüngsten Bericht gemittelt:
+     · Verhalten einer Person (Besuchszeit, Sitzungen je Nutzer …) —
+       über die Summen gerechnet, nicht als Mittel der Monatsmittel
+       (alle Seitenansichten ÷ alle Besucher statt Ø der Monatsquoten)
+     · Reichweite als Ø pro Monat
+     · Trend: Schnitt der letzten drei Monate gegen den 12-Monats-Schnitt
+   Alles wird live aus den geladenen Kanälen gerechnet; im Code stehen
+   keine Werte. Kanäle ohne Daten bleiben einfach leer.
+   ============================================================ */
+
+/* Kanalfarben — feste Reihenfolge, geprüft auf Farbfehlsichtigkeit.
+   Bus-WLAN und WLAN-City teilen sich eine Farbe: Im Kanal-Mix stehen
+   sie gemeinsam als „WLAN“, sonst wären es mehr als sechs Segmente. */
+const BOB_FARBEN = {web:"#1b59f8", app:"#eb6834", news:"#1baf7a", netz:"#eda100",
+                    wlan:"#e87ba4", wlancity:"#e87ba4", chat:"#008300"};
+const BOB_TREND_SCHWELLE = 3;      /* bis ±3 % gilt ein Kanal als stabil */
+
+function bobFenster(id){
+  const k = KANAELE[id];
+  if(!k) return null;
+  const ord = k.ordnung();
+  if(!ord.length) return null;
+  const bis = ord[ord.length - 1], von = monatMinus(bis, 11);
+  const keys = ord.filter(function(x){ return x >= von; });
+  return {id:id, k:k, d:k.daten(), keys:keys, von:von, bis:bis};
+}
+function bobWerte(f, feld){
+  return f.keys.map(function(k){ const kpi = f.d[k].kpi || {}; return kpi[feld]; }).filter(hatWert);
+}
+function bobSumme(f, feld){ return bobWerte(f, feld).reduce(function(a,b){ return a + b; }, 0); }
+function bobMittel(f, feld){ const w = bobWerte(f, feld); return w.length ? bobSumme(f, feld) / w.length : null; }
+/* Quote über Summen: nur Monate, in denen beide Werte vorliegen */
+function bobQuote(f, zaehler, nenner){
+  let z = 0, n = 0;
+  f.keys.forEach(function(k){
+    const kpi = f.d[k].kpi || {};
+    if(hatWert(kpi[zaehler]) && kpi[nenner] > 0){ z += kpi[zaehler]; n += kpi[nenner]; }
+  });
+  return n > 0 ? z / n : null;
+}
+/* Mittelwert einer Quote, gewichtet mit einer Menge (z. B. Besuchszeit mit Besuchen) */
+function bobGewichtet(f, feld, gewicht){
+  let s = 0, g = 0;
+  f.keys.forEach(function(k){
+    const kpi = f.d[k].kpi || {};
+    if(hatWert(kpi[feld]) && kpi[gewicht] > 0){ s += kpi[feld] * kpi[gewicht]; g += kpi[gewicht]; }
+  });
+  return g > 0 ? s / g : bobMittel(f, feld);
+}
+function bobAddiere(objekte){
+  const out = {};
+  objekte.forEach(function(o){
+    Object.keys(o || {}).forEach(function(n){ if(hatWert(o[n])) out[n] = (out[n] || 0) + o[n]; });
+  });
+  return out;
+}
+/* Rangliste aus {Name → Wert}; Anteile beziehen sich auf alles, auch auf Ausgeschlossenes */
+function bobRang(obj, ohne){
+  const summe = Object.keys(obj).reduce(function(a,n){ return a + (obj[n] > 0 ? obj[n] : 0); }, 0);
+  return Object.keys(obj).filter(function(n){ return obj[n] > 0 && (ohne || []).indexOf(n) === -1; })
+    .sort(function(a,b){ return obj[b] - obj[a]; })
+    .map(function(n){ return {name:n, wert:obj[n], anteil: summe ? obj[n] / summe * 100 : 0}; });
+}
+function bobTrend(werte){
+  if(werte.length < 4) return null;
+  const alle = werte.reduce(function(a,b){ return a + b; }, 0) / werte.length;
+  const drei = werte.slice(-3).reduce(function(a,b){ return a + b; }, 0) / 3;
+  return alle > 0 ? (drei - alle) / alle * 100 : null;
+}
+function bobReihe(f, feld){
+  return f.keys.map(function(k){ return {key:k, v:(f.d[k].kpi || {})[feld]}; })
+    .filter(function(p){ return hatWert(p.v); });
+}
+function bobSummenreihe(listen, laenge){
+  const out = new Array(laenge).fill(0);
+  let hat = false;
+  listen.forEach(function(l){
+    if(!l) return;
+    for(let i = 0; i < laenge; i++){ if(hatWert(l[i])){ out[i] += l[i]; hat = true; } }
+  });
+  return hat ? out : null;
+}
+function bobSpitze(arr){
+  let m = 0, i = -1;
+  (arr || []).forEach(function(v, j){ if(v > m){ m = v; i = j; } });
+  return i;
+}
+function bobZeitraum(f){
+  return f.keys.length > 1 ? kurzMonat(f.keys[0]) + " – " + kurzMonat(f.keys[f.keys.length - 1]) : kurzMonat(f.keys[0]);
+}
+const BOB_WT_ADV = ["montags","dienstags","mittwochs","donnerstags","freitags","samstags","sonntags"];
+const BOB_ORDINAL = {2:"zweiten",3:"dritten",4:"vierten",5:"fünften",6:"sechsten",7:"siebten",8:"achten",9:"neunten",10:"zehnten"};
+function bobJederNte(rate){
+  if(!(rate > 0)) return null;
+  const n = Math.round(100 / rate);
+  if(n <= 1) return "fast jeden";
+  return BOB_ORDINAL[n] ? "etwa jeden " + BOB_ORDINAL[n] : null;
+}
+function bobMal(x){ return dec1(x) + "-mal"; }
+
+/* Jeder Kanal beschreibt Bob mit denselben Bausteinen:
+     kern        große Zahl der Karte (typisches Verhalten)
+     neben       eine Zeile Einordnung
+     reichweite  Ø pro Monat (Fußzeile der Karte, Detailansicht)
+     kontakte    Nutzungen pro Monat für den Kanal-Mix
+     trend       letzte drei Monate gegen den 12-Monats-Schnitt (%)
+     verhalten   Kacheln in der Detailansicht
+     typisch     Liste „Typisch für Bob“
+     fakten      Sätze für die Sprechblase
+     stunden     Nutzung je Stunde (für „Bobs Tag“), falls vorhanden */
+const BOB_PROFILE = {
+  web: function(f){
+    const besucher = bobMittel(f, "visitors");
+    const zeit     = bobGewichtet(f, "avgTime", "visits");
+    const absprung = bobGewichtet(f, "bounce", "visits");
+    const seitenJe = bobQuote(f, "pageviews", "visitors");
+    const geraete  = bobRang(bobAddiere(f.keys.map(function(k){ return f.d[k].devices; })), ["Sonstige"]);
+    const herkunft = bobRang(bobAddiere(f.keys.map(function(k){ return f.d[k].channels; })));
+    const seiten = {}, suchen = {};
+    f.keys.forEach(function(k){
+      preparePages(f.d[k].pages || []).forEach(function(r){ seiten[r[0]] = (seiten[r[0]] || 0) + r[1]; });
+      (f.d[k].searchTerms || []).forEach(function(r){ suchen[r[0]] = (suchen[r[0]] || 0) + r[1]; });
+    });
+    const topSeite = bobRang(seiten, ["Startseite"])[0], topSuche = bobRang(suchen)[0];
+    const ki = f.keys.reduce(function(a,k){ return a + ((f.d[k].ai || {}).total || 0); }, 0);
+    const traffic = bobSumme(f, "visits");
+    const GERAET = {Smartphone:"per Smartphone", Desktop:"am Desktop-PC", Tablet:"per Tablet"};
+    const WEG = {"Suchmaschinen":"über Suchmaschinen", "Direkte Zugriffe":"direkt über Adresse oder Lesezeichen",
+                 "Webseiten":"über Links auf anderen Websites", "Kampagnen":"über Kampagnen",
+                 "Soziale Netzwerke":"über soziale Netzwerke"};
+    const g = geraete[0], h = herkunft[0];
+    const fakten = [];
+    if(hatWert(zeit)) fakten.push("Bob bleibt im Schnitt " + dur(zeit) + " auf bus-und-bahn.de.");
+    if(h) fakten.push("Auf bus-und-bahn.de kommt Bob meist " + (WEG[h.name] || "über " + h.name) + ".");
+    if(topSuche) fakten.push("In der Suche auf bus-und-bahn.de tippt Bob am häufigsten „" + topSuche.name + "“ ein.");
+    if(topSeite) fakten.push("Nach der Startseite öffnet Bob am häufigsten „" + topSeite.name + "“.");
+    if(g) fakten.push("Bob surft auf bus-und-bahn.de meist " + (GERAET[g.name] || "mit " + g.name) + " (" + pct(g.anteil) + ").");
+    return {
+      kern: {wert: hatWert(zeit) ? dur(zeit) : "—", label: "Ø Besuchszeit"},
+      neben: g ? "meist " + (GERAET[g.name] || g.name) + " · " + pct(g.anteil) : "",
+      reichweite: {wert: besucher, text: "eindeutige Besucher pro Monat", kurz: "Besucher/Monat"},
+      kontakte: {wert: besucher, einheit: "eindeutige Besucher"},
+      trend: bobTrend(bobWerte(f, "visitors")), trendArt: "Eindeutige Besucher",
+      reihe: bobReihe(f, "visitors"),
+      verhalten: [
+        {wert: hatWert(zeit) ? dur(zeit) : "—", label: "Ø Besuchszeit"},
+        {wert: hatWert(seitenJe) ? dec1(seitenJe) : "—", label: "Seitenansichten je Besucher"},
+        {wert: hatWert(absprung) ? pct(absprung) : "—", label: "Absprungrate"},
+        {wert: g ? pct(g.anteil) : "—", label: g ? g.name : "Gerät"}
+      ],
+      typisch: [
+        topSeite ? {label:"Lieblingsseite nach der Startseite", wert: topSeite.name} : null,
+        h ? {label:"So kommt Bob auf die Seite", wert: (WEG[h.name] || h.name) + " (" + pct(h.anteil) + ")"} : null,
+        topSuche ? {label:"Häufigster Suchbegriff", wert: "„" + topSuche.name + "“"} : null,
+        traffic > 0 ? {label:"Aus KI-Assistenten", wert: pct(ki / traffic * 100) + " des Website-Traffics"} : null
+      ].filter(Boolean),
+      fakten: fakten
+    };
+  },
+
+  app: function(f){
+    const nutzer   = bobMittel(f, "activeUsers");
+    const sessJe   = bobQuote(f, "sessions", "activeUsers");
+    const screensJe= bobQuote(f, "screenViews", "sessions");
+    const inst     = bobMittel(f, "installs");
+    const plattform= bobRang({"iOS": bobSumme(f, "ios"), "Android": bobSumme(f, "android")});
+    const events   = bobRang(bobAddiere(f.keys.map(function(k){ return f.d[k].eventMap; })),
+                             ["SplashViewController","ContainerViewController","WebViewController"]);
+    const top = events[0], p = plattform[0];
+    const topName = top ? (APP_EVENT_LABELS[top.name] || top.name) : null;
+    const fakten = [];
+    if(hatWert(sessJe)) fakten.push("Bob öffnet die DSW21-App im Schnitt " + bobMal(sessJe) + " im Monat.");
+    if(topName) fakten.push("In der DSW21-App nutzt Bob am häufigsten „" + topName + "“.");
+    if(hatWert(screensJe)) fakten.push("Pro App-Sitzung sieht Bob im Schnitt " + dec1(screensJe) + " Bildschirme.");
+    if(p) fakten.push("Bob nutzt die DSW21-App eher auf " + p.name + " (" + pct(p.anteil) + ").");
+    return {
+      kern: {wert: hatWert(sessJe) ? dec1(sessJe) + "×" : "—", label: "App-Sitzungen im Monat"},
+      neben: topName ? "am häufigsten: " + topName : "",
+      reichweite: {wert: nutzer, text: "aktive Nutzer pro Monat", kurz: "aktive Nutzer/Monat"},
+      kontakte: {wert: bobMittel(f, "sessions"), einheit: "App-Sitzungen"},
+      trend: bobTrend(bobWerte(f, "activeUsers")), trendArt: "Aktive Nutzer",
+      reihe: bobReihe(f, "activeUsers"),
+      verhalten: [
+        {wert: hatWert(sessJe) ? dec1(sessJe) : "—", label: "Sitzungen je aktivem Nutzer und Monat"},
+        {wert: hatWert(screensJe) ? dec1(screensJe) : "—", label: "Bildschirme je Sitzung"},
+        {wert: p ? pct(p.anteil) : "—", label: p ? "nutzt " + p.name : "Plattform"},
+        {wert: hatWert(inst) ? fmt(inst) : "—", label: "Ø Neuinstallationen im Monat"}
+      ],
+      typisch: [
+        topName ? {label:"Meistgenutzter Bildschirm", wert: topName} : null,
+        events[1] ? {label:"Danach", wert: APP_EVENT_LABELS[events[1].name] || events[1].name} : null,
+        p ? {label:"Plattform", wert: p.name + " (" + pct(p.anteil) + ")"} : null
+      ].filter(Boolean),
+      fakten: fakten
+    };
+  },
+
+  news: function(f){
+    const empf    = bobMittel(f, "recipients");
+    const oeffnung= (function(){ const q = bobQuote(f, "uniqueOpens", "delivered"); return q !== null ? q * 100 : bobMittel(f, "openRate"); })();
+    const klick   = (function(){ const q = bobQuote(f, "uniqueClicks", "uniqueOpens"); return q !== null ? q * 100 : bobMittel(f, "clickRate"); })();
+    const abmelde = (function(){ const q = bobQuote(f, "unsubscribes", "delivered"); return q !== null ? q * 100 : bobMittel(f, "unsubscribeRate"); })();
+    const themen = {};
+    f.keys.forEach(function(k){ (f.d[k].themen || []).forEach(function(t){ themen[t.thema] = (themen[t.thema] || 0) + t.klicks; }); });
+    const topThemen = bobRang(themen);
+    const stunden = bobSummenreihe(f.keys.map(function(k){ return f.d[k].stunden; }), 24);
+    const hSpitze = bobSpitze(stunden);
+    const jeder = bobJederNte(oeffnung);
+    const oeffnungen = bobSumme(f, "uniqueOpens");
+    /* Monate im Zeitfenster: zwölf, außer der Kanal ist jünger */
+    const ab = f.k.ordnung()[0] > f.von ? f.k.ordnung()[0] : f.von;
+    const monate = Math.max(1, (+f.bis.slice(0,4) - +ab.slice(0,4)) * 12 + (+f.bis.slice(5,7) - +ab.slice(5,7)) + 1);
+    const t = topThemen[0];
+    const fakten = [];
+    if(jeder) fakten.push("Bob öffnet " + jeder + " Newsletter.");
+    if(hatWert(klick)) fakten.push("Hat Bob den Newsletter geöffnet, klickt er in " + pct(klick) + " der Fälle auf einen Link.");
+    if(t) fakten.push("Im Newsletter klickt Bob am liebsten auf das Thema „" + t.name + "“.");
+    if(hSpitze > -1) fakten.push("Den Newsletter liest Bob meist gegen " + hSpitze + " Uhr.");
+    return {
+      kern: {wert: hatWert(oeffnung) ? pct(oeffnung) : "—", label: "Öffnungsrate"},
+      neben: t ? "klickt am liebsten: " + t.name : "",
+      reichweite: {wert: empf, text: "Empfänger je Versand · " + f.keys.length + (f.keys.length === 1 ? " Versand" : " Versände"),
+                   kurz: "Empfänger/Versand"},
+      /* Öffnungen auf den Monat verteilt, damit der Mix vergleichbar bleibt */
+      kontakte: {wert: oeffnungen / monate, einheit: "Newsletter-Öffnungen"},
+      trend: bobTrend(bobWerte(f, "openRate")), trendArt: "Öffnungsrate", trendBezug: "der letzten drei Versände",
+      reihe: bobReihe(f, "openRate"),
+      reiheArt: "pct",
+      verhalten: [
+        {wert: hatWert(oeffnung) ? pct(oeffnung) : "—", label: "Öffnungsrate (auf Zugestellte)"},
+        {wert: hatWert(klick) ? pct(klick) : "—", label: "Klickrate (auf Öffner)"},
+        {wert: hatWert(abmelde) ? pct(abmelde) : "—", label: "Abmelderate"},
+        {wert: hSpitze > -1 ? hSpitze + " Uhr" : "—", label: "häufigste Lesezeit"}
+      ],
+      typisch: topThemen.slice(0, 3).map(function(x, i){
+        return {label: i === 0 ? "Lieblingsthema" : (i + 1) + ". Thema", wert: x.name + " (" + pct(x.anteil) + " der Klicks)"};
+      }),
+      fakten: fakten,
+      stunden: stunden, stundenArt: "Öffnungen"
+    };
+  },
+
+  netz: function(f){
+    const besuche  = bobMittel(f, "visits");
+    const zeit     = bobGewichtet(f, "avgTime", "visits");
+    const seitenJe = bobQuote(f, "pages", "visits");
+    const besucheJe= bobQuote(f, "visits", "visitors");
+    const stunden  = bobSummenreihe(f.keys.map(function(k){ return (f.d[k].stunden || []).length === 24
+      ? f.d[k].stunden.map(function(s){ return s.seiten; }) : null; }), 24);
+    const wochen   = bobSummenreihe(f.keys.map(function(k){ return (f.d[k].wochentage || []).map(function(w){ return w.seiten; }); }), 7);
+    const os = bobRang(bobAddiere(f.keys.map(function(k){
+      const o = {}; (f.d[k].os || []).forEach(function(e){ o[e[0]] = e[1]; }); return o; })), ["Unbekannt","Sonstige"]);
+    const h = bobSpitze(stunden), w = bobSpitze(wochen), sys = os[0];
+    const fakten = [];
+    if(h > -1 && w > -1) fakten.push("Den Netzplan öffnet Bob am häufigsten " + BOB_WT_ADV[w] + " gegen " + h + " Uhr.");
+    if(hatWert(seitenJe)) fakten.push("Im Netzplan schaut sich Bob im Schnitt " + dec1(seitenJe) + " Seiten pro Besuch an.");
+    if(sys) fakten.push("Seine Fahrt im Netzplan plant Bob meist mit " + sys.name + ".");
+    if(hatWert(zeit)) fakten.push("Pro Besuch verbringt Bob im Netzplan im Schnitt " + dur(zeit) + ".");
+    return {
+      kern: {wert: hatWert(zeit) ? dur(zeit) : "—", label: "Ø Aufenthaltsdauer"},
+      neben: (w > -1 ? "am meisten " + BOB_WT_ADV[w] : "") + (h > -1 ? (w > -1 ? " · " : "am meisten ") + h + " Uhr" : ""),
+      reichweite: {wert: besuche, text: "Besuche pro Monat", kurz: "Besuche/Monat"},
+      kontakte: {wert: besuche, einheit: "Besuche"},
+      trend: bobTrend(bobWerte(f, "visits")), trendArt: "Besuche",
+      reihe: bobReihe(f, "visits"),
+      verhalten: [
+        {wert: hatWert(zeit) ? dur(zeit) : "—", label: "Ø Aufenthaltsdauer"},
+        {wert: hatWert(seitenJe) ? dec1(seitenJe) : "—", label: "Seiten je Besuch"},
+        {wert: hatWert(besucheJe) ? dec1(besucheJe) : "—", label: "Besuche je Besucher und Monat"},
+        {wert: sys ? pct(sys.anteil) : "—", label: sys ? "mit " + sys.name : "Betriebssystem"}
+      ],
+      typisch: [
+        h > -1 ? {label:"Stärkste Stunde", wert: h + ":00–" + h + ":59 Uhr (Serverzeit)"} : null,
+        w > -1 ? {label:"Stärkster Wochentag", wert: BOB_WT_ADV[w].replace(/s$/, "").replace(/^./, function(c){ return c.toUpperCase(); })} : null,
+        sys ? {label:"Betriebssystem", wert: sys.name + " (" + pct(sys.anteil) + ")"} : null
+      ].filter(Boolean),
+      fakten: fakten,
+      stunden: stunden, stundenArt: "Seitenaufrufe",
+      wochen: wochen, wochenArt: "Seitenaufrufe"
+    };
+  },
+
+  wlan: function(f){ return bobWlan(f, "Bus-WLAN"); },
+  wlancity: function(f){ return bobWlan(f, "WLAN-City"); },
+
+  chat: function(f){
+    const anfragen = bobMittel(f, "anfragen");
+    const jeKonv   = bobQuote(f, "anfragen", "konversationen");
+    const themen = bobRang(bobAddiere(f.keys.map(function(k){ return f.d[k].treffer; })), ["(Leer)", CHAT_OHNE]);
+    const stunden = bobSummenreihe(f.keys.map(function(k){ return f.d[k].stunden; }), 24);
+    const wochen  = bobSummenreihe(f.keys.map(function(k){ return f.d[k].wochentage; }), 7);
+    const h = bobSpitze(stunden), w = bobSpitze(wochen), t = themen[0];
+    const fakten = [];
+    if(t) fakten.push("Den Chatbot fragt Bob am häufigsten zum Thema „" + t.name + "“.");
+    if(hatWert(jeKonv)) fakten.push("Pro Gespräch stellt Bob dem Chatbot im Schnitt " + dec1(jeKonv) + " Fragen.");
+    if(h > -1) fakten.push("Mit dem Chatbot schreibt Bob am häufigsten gegen " + h + " Uhr.");
+    return {
+      kern: {wert: hatWert(jeKonv) ? dec1(jeKonv) : "—", label: "Fragen pro Gespräch"},
+      neben: t ? "meist zu: " + t.name : "",
+      reichweite: {wert: anfragen, text: "Anfragen pro Monat", kurz: "Anfragen/Monat"},
+      kontakte: {wert: bobMittel(f, "konversationen") || anfragen, einheit: bobMittel(f, "konversationen") ? "Chat-Gespräche" : "Anfragen"},
+      trend: bobTrend(bobWerte(f, "anfragen")), trendArt: "Anfragen",
+      reihe: bobReihe(f, "anfragen"),
+      verhalten: [
+        {wert: hatWert(jeKonv) ? dec1(jeKonv) : "—", label: "Fragen pro Gespräch"},
+        {wert: t ? pct(t.anteil) : "—", label: t ? "zum Thema " + t.name : "Thema"},
+        {wert: h > -1 ? h + " Uhr" : "—", label: "häufigste Uhrzeit"},
+        {wert: w > -1 ? WOCHENTAGE[w] : "—", label: "stärkster Wochentag"}
+      ],
+      typisch: themen.slice(0, 3).map(function(x, i){
+        return {label: i === 0 ? "Häufigstes Thema" : (i + 1) + ". Thema", wert: x.name + " (" + pct(x.anteil) + ")"};
+      }),
+      fakten: fakten,
+      stunden: stunden, stundenArt: "Anfragen",
+      wochen: wochen, wochenArt: "Anfragen"
+    };
+  }
+};
+
+function bobWlan(f, name){
+  const sitzungen = bobMittel(f, "sessions");
+  const jeGeraet  = bobQuote(f, "sessions", "devices");
+  const lizenz    = bobMittel(f, "licensePct");
+  const profile   = bobRang(bobAddiere(f.keys.map(function(k){
+    const o = {}; (f.d[k].profile || []).forEach(function(p){ o[p[0]] = p[1]; }); return o; })));
+  const p = profile[0];
+  const fakten = [];
+  if(hatWert(jeGeraet)) fakten.push("Im " + name + " verbindet sich Bob im Schnitt " + bobMal(jeGeraet) + " im Monat.");
+  if(p) fakten.push("Im " + name + " meldet sich Bob meist per " + p.name + " an (" + pct(p.anteil) + ").");
+  return {
+    kern: {wert: hatWert(jeGeraet) ? dec1(jeGeraet) + "×" : "—", label: "Sitzungen je Gerät im Monat"},
+    neben: p ? "meist per " + p.name + " · " + pct(p.anteil) : "",
+    reichweite: {wert: sitzungen, text: "Sitzungen pro Monat", kurz: "Sitzungen/Monat"},
+    kontakte: {wert: sitzungen, einheit: "WLAN-Sitzungen"},
+    trend: bobTrend(bobWerte(f, "sessions")), trendArt: "Sitzungen",
+    reihe: bobReihe(f, "sessions"),
+    verhalten: [
+      {wert: hatWert(jeGeraet) ? dec1(jeGeraet) : "—", label: "Sitzungen je Gerät und Monat"},
+      {wert: p ? pct(p.anteil) : "—", label: p ? "per " + p.name : "Profil"},
+      {wert: hatWert(bobMittel(f, "devices")) ? fmt(bobMittel(f, "devices")) : "—", label: "Ø Geräte im Monat"},
+      {wert: hatWert(lizenz) ? pct(lizenz) : "—", label: "Ø Spitzenlast der Lizenz"}
+    ],
+    typisch: profile.slice(0, 3).map(function(x, i){
+      return {label: i === 0 ? "Häufigstes Profil" : (i + 1) + ". Profil", wert: x.name + " (" + pct(x.anteil) + ")"};
+    }),
+    fakten: fakten
+  };
+}
+
+/* Alle Kanäle auf einmal; Kanäle ohne Daten liefern null. */
+function bobProfile(){
+  const out = {};
+  kanalListe().forEach(function(id){
+    const f = bobFenster(id), fn = BOB_PROFILE[id];
+    if(!f || !fn){ out[id] = null; return; }
+    let p = null;
+    try{ p = fn(f); }catch(e){ p = null; }
+    if(!p){ out[id] = null; return; }
+    p.id = id;
+    p.name = kurzName(id);
+    p.titel = KANAELE[id].titel;
+    p.farbe = BOB_FARBEN[id] || "#1b59f8";
+    p.zeitraum = bobZeitraum(f);
+    p.anzahl = f.keys.length;
+    p.einheit = einheit(id, f.keys.length);
+    out[id] = p;
+  });
+  return out;
+}
+
+/* Kanal-Mix: Nutzungen pro Monat je Kanal, WLAN zusammengefasst. */
+function bobMix(profile){
+  const teile = [];
+  kanalListe().forEach(function(id){
+    const p = profile[id];
+    if(!p || !(p.kontakte && p.kontakte.wert > 0)) return;
+    if(id === "wlancity" || id === "wlan"){
+      let w = teile.find(function(t){ return t.id === "wlan"; });
+      if(!w){ w = {id:"wlan", ids:[], name:"WLAN", farbe:BOB_FARBEN.wlan, wert:0, einheit:"WLAN-Sitzungen", teile:[]}; teile.push(w); }
+      w.ids.push(id);
+      w.wert += p.kontakte.wert;
+      w.teile.push(p.name + " " + fmt(p.kontakte.wert));
+      w.name = w.ids.length > 1 ? "Bus-WLAN & WLAN-City" : p.name;
+      return;
+    }
+    teile.push({id:id, ids:[id], name:p.name, farbe:p.farbe, wert:p.kontakte.wert, einheit:p.kontakte.einheit});
+  });
+  const summe = teile.reduce(function(a,t){ return a + t.wert; }, 0);
+  teile.forEach(function(t){ t.anteil = summe ? t.wert / summe * 100 : 0; });
+  return {teile:teile, summe:summe};
+}
+
+/* Fakten reihum aus allen Kanälen, damit die Sprechblase abwechselt. */
+function bobFakten(profile){
+  const listen = kanalListe().map(function(id){
+    const p = profile[id];
+    return p ? p.fakten.map(function(t){ return {id:id, name:p.name, farbe:p.farbe, text:t}; }) : [];
+  });
+  const out = [];
+  for(let i = 0; i < 6; i++) listen.forEach(function(l){ if(l[i]) out.push(l[i]); });
+  return out;
+}
+
+/* Bobs Tag: Kanäle mit Stundenwerten, je Stunde als Anteil am ganzen Tag. */
+function bobTagZeilen(profile){
+  return ["netz","news","chat"].map(function(id){
+    const p = profile[id];
+    if(!p || !p.stunden) return null;
+    const summe = p.stunden.reduce(function(a,b){ return a + b; }, 0);
+    if(!(summe > 0)) return null;
+    return {id:id, name:p.name, farbe:p.farbe, art:p.stundenArt,
+            anteile: p.stunden.map(function(v){ return v / summe * 100; }), spitze: bobSpitze(p.stunden)};
+  }).filter(Boolean);
+}
+/* Bobs Woche: Kanäle mit Wochentagswerten, je Tag als Anteil an der Woche. */
+function bobWocheZeilen(profile){
+  return ["netz","chat"].map(function(id){
+    const p = profile[id];
+    if(!p || !p.wochen) return null;
+    const summe = p.wochen.reduce(function(a,b){ return a + b; }, 0);
+    if(!(summe > 0)) return null;
+    return {id:id, name:p.name, farbe:p.farbe, art:p.wochenArt,
+            anteile: p.wochen.map(function(v){ return v / summe * 100; }), spitze: bobSpitze(p.wochen),
+            werktag: (summe - p.wochen[5] - p.wochen[6]) / summe * 100};
+  }).filter(Boolean);
+}
+function bobTageszeit(h){
+  if(h >= 5 && h <= 9) return "morgens";
+  if(h >= 10 && h <= 11) return "vormittags";
+  if(h >= 12 && h <= 13) return "mittags";
+  if(h >= 14 && h <= 17) return "nachmittags";
+  if(h >= 18 && h <= 22) return "abends";
+  return "nachts";
+}
+function bobTagSatz(zeilen){
+  const TUN = {netz:["plant", "im Netzplan"], news:["liest", "den Newsletter"], chat:["fragt", "den Chatbot"]};
+  const teile = zeilen.slice().sort(function(a,b){ return a.spitze - b.spitze; }).map(function(z, i){
+    return bobTageszeit(z.spitze) + " gegen " + z.spitze + " Uhr " + TUN[z.id][0] + " " + (i ? "er" : "Bob") + " " + TUN[z.id][1];
+  });
+  if(!teile.length) return "";
+  let satz = teile.length === 1 ? teile[0] : teile.slice(0, -1).join(", ") + " und " + teile[teile.length - 1];
+  return satz.charAt(0).toUpperCase() + satz.slice(1) + ".";
+}
+
+/* ============================================================
+   13c. Ø-FAHRGAST „BOB" — DARSTELLUNG
+
+   Bühne: Bob in der Mitte (Foto, per WebGL leicht verformt, damit
+   Kopf und Augen der Maus folgen), dahinter der Kanal-Mix-Ring, links
+   und rechts schwebende Kanalkarten, am Kopf eine Sprechblase mit
+   wechselnden Fakten. Darunter „Bobs Tag“ und der Kanal-Mix als Liste.
+   ============================================================ */
+const BOB = {
+  /* Relativ, damit Bild und Seite dieselbe Herkunft haben — sonst darf
+     WebGL das Bild nicht lesen. Die absolute Adresse ist der Notnagel. */
+  bild:        "/fileadmin/user_upload/17_kennzahlen/photorealistic-studio-photograph-of-bob.png",
+  bildAbsolut: "https://www.bus-und-bahn.de/fileadmin/user_upload/17_kennzahlen/photorealistic-studio-photograph-of-bob.png",
+  /* Vermessen am Originalbild (880 × 1168 px, freigestellt). Alle Werte
+     als Anteil von Bildbreite (x, rx) bzw. Bildhöhe (y, ry). Wird das
+     Bild einmal gegen ein anders geschnittenes getauscht, erkennt die
+     Seite das am Seitenverhältnis und lässt Kopf und Augen stillstehen. */
+  format: 880 / 1168,
+  kopf:  {x: 0.5071, y: 0.2098, rx: 0.1341, ry: 0.1627, rxHaar: 0.1705},
+  augeL: {x: 0.4500, y: 0.2029, rx: 0.0295, ry: 0.0120},
+  augeR: {x: 0.5642, y: 0.1999, rx: 0.0290, ry: 0.0120},
+  /* Ausschlag bei voller Blickrichtung, ebenfalls als Bildanteil */
+  drehung: {x: 0.0150, y: 0.0065},     /* Kopf: gut 13 bzw. 7,5 Pixel im Original */
+  blick:   {x: 0.0064, y: 0.0013},     /* Iris: gut 5,5 bzw. 1,5 Pixel */
+  atem: 0.0018,
+  blaseTakt: 6500,                      /* ms je Fakt in der Sprechblase */
+  alt: "Bob, der durchschnittliche DSW21-Fahrgast: ein junger Mann mit Kopfhörern, Rucksack und Smartphone in der Hand"
+};
+
+function bobTrendHTML(p, lang){
+  if(!p || !hatWert(p.trend)) return "";
+  const r = Math.round(p.trend * 10) / 10;
+  const stabil = Math.abs(r) < BOB_TREND_SCHWELLE;
+  const cls = stabil ? "flat" : r > 0 ? "up" : "down";
+  const zahl = (r > 0 ? "+" : r < 0 ? "−" : "±") + nf.format(Math.abs(r)) + " %";
+  const satz = p.trendArt + " " + (p.trendBezug || "der letzten drei Monate") + " gegenüber dem 12-Monats-Schnitt: " + zahl +
+               (stabil ? " (stabil)" : "");
+  if(lang) return '<p class="bd-trend ' + cls + '">' + esc(satz) + '</p>';
+  return '<span class="bk-trend ' + cls + '" title="' + esc(satz) + '">' +
+    (stabil ? "stabil" : (r > 0 ? "▲ " : "▼ ") + nf.format(Math.abs(r)) + " %") + '</span>';
+}
+
+function bobKarteHTML(id, p, seite, y, i){
+  const farbe = BOB_FARBEN[id] || "#1b59f8";
+  const name = kurzName(id);
+  const stil = ' style="--y:' + y.toFixed(2) + '%;--i:' + i + ';--farbe:' + farbe + '"';
+  const kopf = '<span class="bk-kopf"><span class="bk-punkt"></span>' + kanalIcon(id) +
+               '<span class="bk-name">' + esc(name) + '</span>' + bobTrendHTML(p) + '</span>';
+  if(!p){
+    const laedt = STATUS[id] && STATUS[id].kind === "loading";
+    return '<button type="button" class="bob-karte leer ' + seite + '" data-kanal="' + esc(id) + '"' + stil +
+      ' aria-label="' + esc(name + ": " + (laedt ? "wird geladen" : "noch keine Daten") + ". Zum Kanal") + '">' + kopf +
+      '<span class="bk-leer">' + (laedt ? "Wird eingelesen …" : "Noch keine Daten – sobald ein Bericht da ist, rechnet Bob mit.") + '</span></button>';
+  }
+  return '<button type="button" class="bob-karte ' + seite + '" data-kanal="' + esc(id) + '"' + stil +
+    ' aria-label="' + esc(name + ": " + p.kern.wert + " " + p.kern.label + ". Details öffnen") + '">' + kopf +
+    '<span class="bk-wert">' + esc(p.kern.wert) + '</span>' +
+    '<span class="bk-label">' + esc(p.kern.label) + '</span>' +
+    (p.neben ? '<span class="bk-neben">' + esc(p.neben) + '</span>' : '') +
+    '<span class="bk-fuss"><span class="bk-rw">Ø ' + (hatWert(p.reichweite.wert) ? fmt(p.reichweite.wert) : "—") + ' ' +
+      esc(p.reichweite.kurz) + '</span><span class="bk-mehr">Mehr<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span></span>' +
+  '</button>';
+}
+
+function bobKartenHTML(profile){
+  const ids = kanalListe();
+  const halb = Math.floor(ids.length / 2);
+  const spalte = function(liste, seite, versatz){
+    const m = liste.length, rand = m >= 4 ? 4 : 6, hoehe = 21;
+    const schritt = m > 1 ? (100 - 2 * rand - hoehe) / (m - 1) : 0;
+    return liste.map(function(id, i){ return bobKarteHTML(id, profile[id], seite, rand + i * schritt, versatz + i); }).join("");
+  };
+  return spalte(ids.slice(0, halb), "links", 0) + spalte(ids.slice(halb), "rechts", halb);
+}
+
+/* Kanal-Mix als Ring hinter Bob: Kreis mit r = 46 im 100er-Raster,
+   je Kanal ein Bogen, 0,8 Einheiten Luft dazwischen. */
+function bobRingHTML(mix){
+  const r = 46, umfang = 2 * Math.PI * r, luft = mix.teile.length > 1 ? 0.8 : 0;
+  let start = 0;
+  const bogen = mix.teile.map(function(t){
+    const laenge = umfang * t.anteil / 100;
+    const sichtbar = Math.max(0.01, laenge - luft);
+    const el = '<circle class="ring-seg" data-mix="' + esc(t.id) + '" cx="50" cy="50" r="' + r + '" stroke="' + t.farbe + '"' +
+      ' stroke-dasharray="' + sichtbar.toFixed(2) + ' ' + (umfang - sichtbar).toFixed(2) + '"' +
+      ' stroke-dashoffset="' + (-start).toFixed(2) + '"><title>' + esc(t.name + ": " + pct(t.anteil) + " der Kontakte") + '</title></circle>';
+    start += laenge;
+    return el;
+  }).join("");
+  return '<g><circle class="ring-spur" cx="50" cy="50" r="' + r + '"/>' + bogen + '</g>';
+}
+
+function bobMixHTML(mix){
+  if(!mix.teile.length){
+    return leereKachel("bob-mix", "Kanal-Mix", "Sobald Kennzahlen eingelesen sind, zeigt der Ring, wie sich Bobs Kontakte auf die Kanäle verteilen.");
+  }
+  const zeilen = mix.teile.slice().sort(function(a,b){ return b.wert - a.wert; }).map(function(t){
+    return '<li data-mix="' + esc(t.id) + '" style="--farbe:' + t.farbe + '" tabindex="0">' +
+      '<span class="bm-punkt"></span><span class="bm-name">' + esc(t.name) + '</span>' +
+      '<span class="bm-wert">' + pct(t.anteil) + '</span>' +
+      '<span class="bm-bahn"><span data-w="' + t.anteil.toFixed(2) + '"></span></span>' +
+      '<small>Ø ' + fmt(t.wert) + ' ' + esc(t.einheit) + ' pro Monat' + (t.teile && t.teile.length > 1 ? ' (' + esc(t.teile.join(" + ")) + ')' : '') + '</small>' +
+    '</li>';
+  }).join("");
+  return '<div class="card bob-mix">' +
+    '<div class="card-head"><h2>Kanal-Mix</h2><span class="card-note">Ø Kontakte pro Monat</span></div>' +
+    '<ul class="bm-liste">' + zeilen + '</ul>' +
+    '<p class="hint">Kontakt = typische Nutzung je Kanal: eindeutige Besucher (Website), Sitzungen (App, WLAN), ' +
+      'Öffnungen (Newsletter), Besuche (Netzplan), Gespräche (Chatbot). Zusammen Ø ' + fmt(mix.summe) +
+      ' Kontakte im Monat. Der Ring hinter Bob zeigt dieselben Anteile.</p>' +
+  '</div>';
+}
+
+function bobWocheHTML(zeilen){
+  if(!zeilen.length) return "";
+  const reihen = zeilen.map(function(z){
+    const max = Math.max.apply(null, z.anteile);
+    const zellen = z.anteile.map(function(a, i){
+      const deckung = 0.07 + 0.93 * (max > 0 ? a / max : 0);
+      /* Beschriftung hell auf dunklen, dunkel auf hellen Feldern */
+      return '<span class="bt-zelle' + (i === z.spitze ? " spitze" : "") + (deckung < 0.55 ? " hell" : "") +
+        '" style="--a:' + deckung.toFixed(3) + '">' +
+        '<em>' + WOCHENTAGE[i] + '</em><i class="tip">' + WOCHENTAGE[i] + ' · ' + esc(pct(a)) + ' der ' + esc(z.art) + '</i></span>';
+    }).join("");
+    return '<div class="bt-zeile woche" data-mix="' + esc(z.id) + '" style="--farbe:' + z.farbe + '">' +
+      '<span class="bt-name">' + kanalIcon(z.id) + '<span>' + esc(z.name) + '</span></span>' +
+      '<span class="bt-streifen sieben">' + zellen + '</span>' +
+      '<span class="bt-spitze">' + WOCHENTAGE[z.spitze] + '</span></div>';
+  }).join("");
+  const saetze = zeilen.map(function(z){
+    return z.name + " " + BOB_WT_ADV[z.spitze] + " (Mo–Fr: " + pct(z.werktag) + " der Woche)";
+  });
+  return '<div class="bt-woche">' +
+    '<h3 class="bt-titel">Bobs Woche</h3>' +
+    '<p class="bt-woche-satz">Am meisten los: ' + esc(saetze.join(", ")) + '.</p>' +
+    '<div class="bt-raster">' + reihen + '</div>' +
+  '</div>';
+}
+
+function bobTagHTML(zeilen, woche){
+  if(!zeilen.length){
+    return leereKachel("bob-tag", "Bobs Tag",
+      "Sobald Netzplan, Newsletter oder Chatbot Stundenwerte liefern, zeigt diese Kachel, wann Bob welchen Kanal nutzt.");
+  }
+  const reihen = zeilen.map(function(z){
+    const max = Math.max.apply(null, z.anteile);
+    const zellen = z.anteile.map(function(a, h){
+      const s = String(h).padStart(2, "0");
+      return '<span class="bt-zelle' + (h === z.spitze ? " spitze" : "") + '" style="--a:' + (0.07 + 0.93 * (max > 0 ? a / max : 0)).toFixed(3) + '">' +
+        '<i class="tip">' + s + ':00–' + s + ':59 Uhr · ' + esc(pct(a)) + ' der ' + esc(z.art) + (z.id === "netz" ? " (Serverzeit)" : "") + '</i></span>';
+    }).join("");
+    return '<div class="bt-zeile" data-mix="' + esc(z.id) + '" style="--farbe:' + z.farbe + '">' +
+      '<span class="bt-name">' + kanalIcon(z.id) + '<span>' + esc(z.name) + '</span></span>' +
+      '<span class="bt-streifen">' + zellen + '</span>' +
+      '<span class="bt-spitze">' + z.spitze + ' Uhr</span></div>';
+  }).join("");
+  const achse = [0, 3, 6, 9, 12, 15, 18, 21, 24].map(function(h){
+    return '<span style="left:' + (h / 24 * 100).toFixed(3) + '%">' + h + '</span>';
+  }).join("");
+  return '<div class="card bob-tag">' +
+    '<div class="card-head"><h2>Bobs Tag</h2><span class="card-note">Nutzung je Stunde · Ø 12 Monate</span></div>' +
+    '<p class="bt-satz">' + esc(bobTagSatz(zeilen)) + '</p>' +
+    '<div class="bt-raster">' +
+      '<div class="bt-kopf"><span class="bt-name"></span><span class="bt-achse">' + achse +
+        '<span class="bt-phase" aria-hidden="true"></span></span><span class="bt-spitze">Spitze</span></div>' +
+      reihen +
+      '<div class="bt-jetzt" aria-hidden="true"><i></i><b></b></div>' +
+    '</div>' +
+    '<p class="bt-nun"></p>' +
+    bobWocheHTML(woche || []) +
+    '<p class="hint">Je Kanal der Anteil jeder Stunde bzw. jedes Wochentags an der ganzen Nutzung – je dunkler, desto mehr. ' +
+      'Netzplan in Serverzeit; Newsletter nur aus Versänden, deren Bericht Uhrzeiten enthält.</p>' +
+  '</div>';
+}
+
+/* Kleine Verlaufslinie für die Detailansicht */
+function bobSparkline(p){
+  const r = p.reihe || [];
+  if(r.length < 2) return '<div class="bd-spark leer">Für einen Verlauf fehlen noch Monate.</div>';
+  const werte = r.map(function(x){ return x.v; });
+  const min = Math.min.apply(null, werte), max = Math.max.apply(null, werte), spanne = max - min || 1;
+  const x = function(i){ return i / (r.length - 1) * 100; };
+  const y = function(v){ return 34 - (v - min) / spanne * 28; };
+  const linie = "M" + r.map(function(pt, i){ return x(i).toFixed(2) + " " + y(pt.v).toFixed(2); }).join(" L");
+  const flaeche = linie + " L100 40 L0 40 Z";
+  const out = FORMATTERS[p.reiheArt || "num"] || fmt;
+  const letzte = r[r.length - 1];
+  return '<div class="bd-spark">' +
+    '<svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-label="' +
+      esc(p.trendArt + " von " + kurzMonat(r[0].key) + " bis " + kurzMonat(letzte.key)) + '">' +
+      '<path class="f" d="' + flaeche + '"/><path class="l" d="' + linie + '" vector-effect="non-scaling-stroke"/></svg>' +
+    '<span class="bd-punkt" style="left:100%;top:' + (y(letzte.v) / 40 * 100).toFixed(2) + '%"></span>' +
+    '<span class="bd-achse"><span>' + esc(kurzMonat(r[0].key)) + '</span><span>' + esc(p.trendArt) + ': min ' + out(min) +
+      ' · max ' + out(max) + '</span><span>' + esc(kurzMonat(letzte.key)) + '</span></span>' +
+  '</div>';
+}
+
+function bobDetailHTML(p){
+  return '<div class="bd-kopf">' +
+      '<span class="bd-icon" style="--farbe:' + p.farbe + '">' + iconSvg(p.id) + '</span>' +
+      '<div class="bd-titel"><h3 id="bd-titel">So nutzt Bob ' + esc(p.titel) + '</h3>' +
+        '<span>Ø ' + esc(p.zeitraum) + ' · ' + p.anzahl + ' ' + esc(p.einheit) + '</span></div>' +
+      '<button type="button" class="bd-zu" aria-label="Details schließen">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>' +
+    '</div>' +
+    '<div class="bd-verhalten">' + p.verhalten.map(function(v){
+      return '<div><b>' + esc(v.wert) + '</b><span>' + esc(v.label) + '</span></div>';
+    }).join("") + '</div>' +
+    '<div class="bd-reichweite">' +
+      '<div class="bd-rw"><span class="bd-klein">Reichweite</span><b>Ø ' + (hatWert(p.reichweite.wert) ? fmt(p.reichweite.wert) : "—") +
+        '</b><span>' + esc(p.reichweite.text) + '</span></div>' +
+      bobSparkline(p) +
+    '</div>' +
+    bobTrendHTML(p, true) +
+    (p.typisch.length ? '<div class="bd-block"><h4>Typisch für Bob</h4><dl>' + p.typisch.map(function(t){
+      return '<div><dt>' + esc(t.label) + '</dt><dd>' + esc(t.wert) + '</dd></div>';
+    }).join("") + '</dl></div>' : '') +
+    (p.fakten.length ? '<div class="bd-block"><h4>Bob in Sätzen</h4><ul>' + p.fakten.map(function(t){
+      return '<li>' + esc(t) + '</li>';
+    }).join("") + '</ul></div>' : '') +
+    '<div class="bd-fuss"><span>Gemittelt über ' + p.anzahl + ' ' + esc(p.einheit) + ' bis ' + esc(p.zeitraum.split(" – ").pop()) + '</span>' +
+      '<button type="button" class="bd-kanal" data-go="' + esc(p.id) + '">Zum Kanal ' + esc(p.name) +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>';
+}
+
+function personaSeite(){
+  const profile = bobProfile();
+  const mix = bobMix(profile), fakten = bobFakten(profile), tag = bobTagZeilen(profile);
+  const erster = fakten[0];
+  const netz = '<svg class="bob-netz" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+    '<path d="M-40 640 C 170 640 230 500 390 500 S 620 590 780 470 S 1010 280 1240 280"/>' +
+    '<path class="fahrt" d="M-40 640 C 170 640 230 500 390 500 S 620 590 780 470 S 1010 280 1240 280"/>' +
+    '<path d="M150 -40 C 150 150 280 220 280 340 S 150 580 230 840"/>' +
+    '<path class="fahrt zwei" d="M1000 -40 C 960 150 1080 300 1020 470 S 900 700 980 840"/>' +
+    '<path d="M1000 -40 C 960 150 1080 300 1020 470 S 900 700 980 840"/>' +
+    '<circle cx="390" cy="500" r="6"/><circle cx="780" cy="470" r="6"/><circle cx="280" cy="340" r="6"/>' +
+    '<circle cx="1020" cy="470" r="6"/><circle cx="1083" cy="316" r="6"/></svg>';
+  return '<div class="bob">' +
+    '<div class="card bob-buehne" id="bob-buehne">' +
+      '<div class="bob-bereich">' + netz +
+        '<div class="bob-zentrum">' +
+          '<div class="bob-scheibe" aria-hidden="true"></div>' +
+          '<svg class="bob-ring" viewBox="0 0 100 100" aria-hidden="true">' + bobRingHTML(mix) + '</svg>' +
+          '<div class="bob-figur">' +
+            '<canvas aria-hidden="true"></canvas>' +
+            '<img alt="' + esc(BOB.alt) + '" decoding="async">' +
+            '<div class="bob-blase" aria-hidden="true">' +
+              '<span class="bob-blase-kanal" style="--farbe:' + (erster ? erster.farbe : "#1b59f8") + '"><i></i><span>' +
+                esc(erster ? erster.name : "Bob") + '</span></span>' +
+              '<span class="bob-blase-text">' + esc(erster ? erster.text
+                : "Das ist Bob. Sobald Kennzahlen eingelesen sind, steht hier, wie er die DSW21-Kanäle nutzt.") + '</span>' +
+              '<span class="bob-blase-fort"><i></i></span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="bob-karten">' + bobKartenHTML(profile) + '</div>' +
+      '<div class="bob-huelle" hidden><div class="bob-detail" role="dialog" aria-modal="true" aria-labelledby="bd-titel" tabindex="-1"></div></div>' +
+      '<p class="bob-hinweis">Bewege die Maus – Bob schaut hin. Klick auf eine Karte zeigt mehr.</p>' +
+    '</div>' +
+    '<div class="grid bob-unten">' + bobTagHTML(tag, bobWocheZeilen(profile)) + bobMixHTML(mix) + '</div>' +
+  '</div>';
+}
+
+/* ---------- Bühne: Blick, Animation, Bedienung ---------- */
+const BOB_VS = "attribute vec2 p;varying vec2 vUv;void main(){vUv=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}";
+const BOB_FS = [
+  "precision highp float;",
+  "varying vec2 vUv;",
+  "uniform sampler2D uBild;",
+  "uniform vec2 uBlick;",      /* Kopf: Blickrichtung -1…1 (x rechts, y unten) */
+  "uniform vec2 uAuge;",       /* Iris: Verschiebung als Bildanteil */
+  "uniform float uAtem;",
+  "uniform vec4 uKopf;",       /* x, y, rx (Gesicht), ry */
+  "uniform float uKopfHaar;",  /* rx einschließlich Haaren */
+  "uniform vec4 uAugeL;",
+  "uniform vec4 uAugeR;",
+  "uniform vec2 uDreh;",
+  "uniform float uAtemHub;",
+  "float glocke(float d){d=clamp(d,0.,1.);float c=cos(d*1.5707963);return c*c;}",
+  "void main(){",
+  "  vec2 uv=vUv;",
+  "  float dx=(uv.x-uKopf.x)/uKopf.z;",
+  "  float dxH=(uv.x-uKopf.x)/uKopfHaar;",
+  "  float dy=(uv.y-uKopf.y)/uKopf.w;",
+  "  vec2 v=vec2(0.);",
+  /* Drehen: die Mittelachse des Gesichts wandert am weitesten, der Umriss bleibt */
+  "  v.x=uBlick.x*uDreh.x*glocke(abs(dx))*(1.-smoothstep(.62,1.,abs(dy)));",
+  /* Nicken: die Augenhöhe wandert am weitesten, Scheitel und Kinn bleiben */
+  "  v.y=uBlick.y*uDreh.y*glocke(abs(dy))*(1.-smoothstep(.7,1.,abs(dxH)));",
+  /* Augen: gemessen an der Stelle, an der das Auge nach der Kopfdrehung liegt */
+  "  vec2 q=uv-v;",
+  "  float wL=1.-smoothstep(.45,1.,length((q-uAugeL.xy)/uAugeL.zw));",
+  "  float wR=1.-smoothstep(.45,1.,length((q-uAugeR.xy)/uAugeR.zw));",
+  "  v+=uAuge*max(wL,wR);",
+  /* Atmen: oben etwas mehr Hub als unten */
+  "  v.y+=uAtem*uAtemHub*(1.-uv.y);",
+  "  gl_FragColor=texture2D(uBild,uv-v);",
+  "}"
+].join("\n");
+
+const bobBuehne = (function(){
+  let aktiv = false, raf = 0, root = null, buehne = null, figur = null, canvas = null, img = null;
+  let gl = null, uni = {}, glOk = false, bildDa = null, passt = true, texturGroesse = "";
+  let blase = null, blaseText = null, blaseKanal = null, huelle = null, detail = null, karten = [];
+  let profile = {}, fakten = [], faktIdx = 0, detailId = null, hoverId = null, eng = false, sichtbar = true;
+  let timer = [], ro = null, io = null, letzte = 0, leerlaufBis = 0, zielTemp = null, fokusVorher = null;
+  const maus = {x:0, y:0, zeit:-1e9, nx:0, ny:0, sx:0, sy:0};
+  const blick = {x:0, y:0.08}, auge = {x:0, y:0.08};
+
+  /* ---- WebGL ---- */
+  function glStart(){
+    try{
+      gl = canvas.getContext("webgl", {alpha:true, premultipliedAlpha:true, antialias:false,
+                                       depth:false, stencil:false, preserveDrawingBuffer:false});
+      if(!gl) return false;
+      const sh = function(typ, src){
+        const s = gl.createShader(typ); gl.shaderSource(s, src); gl.compileShader(s);
+        return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+      };
+      const vs = sh(gl.VERTEX_SHADER, BOB_VS), fs = sh(gl.FRAGMENT_SHADER, BOB_FS);
+      if(!vs || !fs) return false;
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+      if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+      gl.useProgram(prog);
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, "p");
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      const tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      ["uBild","uBlick","uAuge","uAtem","uKopf","uKopfHaar","uAugeL","uAugeR","uDreh","uAtemHub"].forEach(function(n){
+        uni[n] = gl.getUniformLocation(prog, n);
+      });
+      gl.uniform1i(uni.uBild, 0);
+      gl.uniform4f(uni.uKopf, BOB.kopf.x, BOB.kopf.y, BOB.kopf.rx, BOB.kopf.ry);
+      gl.uniform1f(uni.uKopfHaar, BOB.kopf.rxHaar);
+      gl.uniform4f(uni.uAugeL, BOB.augeL.x, BOB.augeL.y, BOB.augeL.rx, BOB.augeL.ry);
+      gl.uniform4f(uni.uAugeR, BOB.augeR.x, BOB.augeR.y, BOB.augeR.rx, BOB.augeR.ry);
+      /* Passt das Bild nicht zu den Messpunkten, bewegt sich nur der Atem. */
+      gl.uniform2f(uni.uDreh, passt ? BOB.drehung.x : 0, passt ? BOB.drehung.y : 0);
+      gl.uniform1f(uni.uAtemHub, REDUCED ? 0 : BOB.atem);
+      return texturLaden();
+    }catch(e){ return false; }
+  }
+  /* Das Foto wird in genau der Größe hochgeladen, in der es erscheint —
+     so rechnet der Browser die Verkleinerung in voller Qualität. */
+  function texturLaden(){
+    if(!gl || !bildDa) return false;
+    const w = canvas.width, h = canvas.height;
+    if(!w || !h) return true;
+    const schluessel = w + "x" + h;
+    if(schluessel === texturGroesse) return true;
+    try{
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const g = c.getContext("2d");
+      g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
+      g.drawImage(bildDa, 0, 0, w, h);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+      texturGroesse = schluessel;
+      return true;
+    }catch(e){
+      /* Fremde Herkunft ohne Freigabe: WebGL darf das Bild nicht lesen. */
+      return false;
+    }
+  }
+  function zeichnen(atem){
+    if(!glOk) return;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform2f(uni.uBlick, blick.x, blick.y);
+    gl.uniform2f(uni.uAuge, passt ? auge.x * BOB.blick.x : 0, passt ? auge.y * BOB.blick.y : 0);
+    gl.uniform1f(uni.uAtem, atem);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+
+  function bildLaden(){
+    const quellen = [BOB.bild, BOB.bildAbsolut];
+    let i = 0;
+    (function versuch(){
+      if(!aktiv) return;
+      if(i >= quellen.length){ figur.classList.add("ohne-bild"); return; }
+      const src = quellen[i++];
+      const neu = new Image();
+      try{ if(new URL(src, location.href).origin !== location.origin) neu.crossOrigin = "anonymous"; }catch(e){}
+      neu.onload = function(){
+        if(!aktiv) return;
+        bildDa = neu;
+        passt = Math.abs(neu.naturalWidth / neu.naturalHeight - BOB.format) < 0.02;
+        img.src = neu.src;
+        groesse();
+        glOk = glStart();
+        figur.classList.toggle("gl", glOk);
+        figur.classList.add("da");
+      };
+      neu.onerror = versuch;
+      neu.src = src;
+    })();
+  }
+
+  /* ---- Größe und Anordnung ---- */
+  function groesse(){
+    if(!buehne) return;
+    eng = buehne.clientWidth < 980;
+    buehne.classList.toggle("eng", eng);
+    const r = figur.getBoundingClientRect();
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+    if(canvas.width !== w || canvas.height !== h){ canvas.width = w; canvas.height = h; }
+    if(glOk) texturLaden();
+  }
+
+  /* ---- Wohin schaut Bob? ---- */
+  function richtung(px, py){
+    const r = figur.getBoundingClientRect();
+    const kx = r.left + BOB.kopf.x * r.width, ky = r.top + BOB.kopf.y * r.height;
+    return {x: Math.tanh((px - kx) / (r.width * 0.95) * 1.5), y: Math.tanh((py - ky) / (r.height * 0.8) * 1.6)};
+  }
+  function mitteVon(el){
+    const r = el.getBoundingClientRect();
+    return {x: r.left + r.width / 2, y: r.top + r.height / 2};
+  }
+  function ziel(jetzt){
+    if(detailId){
+      const m = mitteVon(detail);
+      return richtung(m.x, m.y + 60);
+    }
+    if(hoverId){
+      const el = buehne.querySelector('.bob-karte[data-kanal="' + hoverId + '"]');
+      if(el){ const m = mitteVon(el); return richtung(m.x, m.y); }
+    }
+    if(zielTemp && jetzt < zielTemp.bis){
+      const el = zielTemp.el;
+      if(el && document.contains(el)){ const m = mitteVon(el); return richtung(m.x, m.y); }
+    }
+    if(jetzt - maus.zeit < 3500) return richtung(maus.x, maus.y);
+    /* Leerlauf: zum Betrachter, mit einem Hauch Bewegung */
+    const s = jetzt / 1000;
+    return {x: Math.sin(s * 0.31) * 0.08, y: 0.1 + Math.sin(s * 0.23 + 1) * 0.04};
+  }
+  function kurzHinsehen(el, dauer){
+    if(!el) return;
+    zielTemp = {el: el, bis: performance.now() + (dauer || 1300)};
+  }
+
+  /* ---- Schleife ---- */
+  function schleife(jetzt){
+    raf = 0;
+    if(!aktiv) return;
+    const dt = Math.min(0.05, Math.max(0.001, (jetzt - (letzte || jetzt)) / 1000));
+    letzte = jetzt;
+    const z = ziel(jetzt);
+    /* Augen folgen schneller als der Kopf */
+    const kk = 1 - Math.exp(-dt * 5.5), ka = 1 - Math.exp(-dt * 13);
+    blick.x += (z.x - blick.x) * kk; blick.y += (z.y - blick.y) * kk;
+    auge.x  += (z.x - auge.x) * ka;  auge.y  += (z.y - auge.y) * ka;
+    const atem = REDUCED ? 0 : Math.sin(jetzt / 1000 * Math.PI * 2 / 4.6);
+    if(glOk) zeichnen(atem);
+    else if(img){
+      img.style.transform = "perspective(1100px) rotateY(" + (blick.x * 5).toFixed(2) + "deg) rotateX(" + (-blick.y * 3).toFixed(2) + "deg)";
+    }
+    /* Karten schweben leicht und weichen der Maus ein wenig aus */
+    const km = 1 - Math.exp(-dt * 4);
+    maus.sx += (maus.nx - maus.sx) * km; maus.sy += (maus.ny - maus.sy) * km;
+    if(!eng && !REDUCED){
+      const s = jetzt / 1000;
+      karten.forEach(function(el, i){
+        const tiefe = 3 + (i % 3) * 2;
+        const fy = Math.sin(s * 0.8 + i * 1.7) * 4;
+        el.style.translate = (-maus.sx * tiefe).toFixed(2) + "px " + (fy - maus.sy * tiefe * 0.7).toFixed(2) + "px";
+      });
+    }
+    if(sichtbar) raf = requestAnimationFrame(schleife);
+  }
+  function weiter(){
+    if(aktiv && sichtbar && !raf){ letzte = 0; raf = requestAnimationFrame(schleife); }
+  }
+
+  /* ---- Sprechblase ---- */
+  function blaseZeigen(i){
+    if(!fakten.length) return;
+    faktIdx = (i + fakten.length) % fakten.length;
+    const f = fakten[faktIdx];
+    blaseText.classList.add("raus");
+    blaseKanal.classList.add("raus");
+    timer.push(setTimeout(function(){
+      if(!aktiv) return;
+      blaseText.textContent = f.text;
+      blaseKanal.style.setProperty("--farbe", f.farbe);
+      blaseKanal.querySelector("span").textContent = f.name;
+      blaseText.classList.remove("raus");
+      blaseKanal.classList.remove("raus");
+      blase.classList.remove("laeuft"); void blase.offsetWidth; blase.classList.add("laeuft");
+      /* Im Leerlauf schaut Bob kurz zur Karte, um die es geht */
+      if(performance.now() - maus.zeit > 3500 && !hoverId && !detailId){
+        kurzHinsehen(buehne.querySelector('.bob-karte[data-kanal="' + f.id + '"]'), 1400);
+      }
+      markieren(f.id, "erzaehlt");
+    }, REDUCED ? 0 : 260));
+  }
+  function markieren(id, klasse){
+    buehne.querySelectorAll(".bob-karte." + klasse).forEach(function(el){ el.classList.remove(klasse); });
+    if(!id) return;
+    const el = buehne.querySelector('.bob-karte[data-kanal="' + id + '"]');
+    if(el) el.classList.add(klasse);
+  }
+
+  /* ---- Hervorheben: Karte, Ring, Mix-Liste und Tageszeile gemeinsam ---- */
+  function fokus(id){
+    const mixId = (id === "wlancity") ? "wlan" : id;
+    root.classList.toggle("mix-fokus", !!id);
+    root.querySelectorAll("[data-mix]").forEach(function(el){
+      el.classList.toggle("aktiv", !!id && el.dataset.mix === mixId);
+    });
+    buehne.querySelectorAll(".bob-karte").forEach(function(el){
+      const k = el.dataset.kanal;
+      el.classList.toggle("hervor", !!id && (k === id || (mixId === "wlan" && (k === "wlan" || k === "wlancity"))));
+    });
+  }
+
+  /* ---- Detailansicht ---- */
+  function detailOeffnen(id){
+    const p = profile[id];
+    if(!p){ wechsle(id); return; }
+    fokusVorher = document.activeElement;
+    detailId = id;
+    detail.innerHTML = bobDetailHTML(p);
+    huelle.hidden = false;
+    buehne.classList.add("detail-offen");
+    void huelle.offsetWidth;
+    huelle.classList.add("an");
+    fokus(id);
+    const zu = detail.querySelector(".bd-zu");
+    if(zu) zu.focus({preventScroll:true});
+  }
+  function detailSchliessen(){
+    if(!detailId) return;
+    const id = detailId;
+    detailId = null;
+    huelle.classList.remove("an");
+    buehne.classList.remove("detail-offen");
+    fokus(null);
+    timer.push(setTimeout(function(){ if(!detailId && huelle) huelle.hidden = true; }, REDUCED ? 0 : 320));
+    const karte = buehne.querySelector('.bob-karte[data-kanal="' + id + '"]');
+    const ziel = (fokusVorher && fokusVorher !== document.body && document.contains(fokusVorher)) ? fokusVorher : karte;
+    if(ziel && ziel.focus) ziel.focus({preventScroll:true});
+  }
+
+  /* ---- Bobs Tag: Markierung „jetzt“ ---- */
+  function uhr(){
+    const tag = root.querySelector(".bob-tag");
+    if(!tag) return;
+    const jetzt = new Date(), h = jetzt.getHours(), m = jetzt.getMinutes();
+    const marke = tag.querySelector(".bt-jetzt");
+    if(marke){
+      marke.style.setProperty("--pos", ((h + m / 60) / 24).toFixed(4));
+      marke.querySelector("b").textContent = "jetzt " + String(h).padStart(2,"0") + ":" + String(m).padStart(2,"0");
+    }
+    const zeilen = bobTagZeilen(profile), nun = tag.querySelector(".bt-nun");
+    if(nun && zeilen.length){
+      const best = zeilen.map(function(z){ return {z:z, rel: z.anteile[h] * 24 / 100}; })
+        .sort(function(a,b){ return b.rel - a.rel; })[0];
+      nun.textContent = best.rel < 0.35
+        ? "Um diese Uhrzeit (" + h + " Uhr) ist es bei Bob ruhig – in keinem Kanal ist viel los."
+        : "Um diese Uhrzeit (" + h + " Uhr) ist Bob am ehesten im Kanal " + best.z.name + " unterwegs – " +
+          "dort fällt jetzt " + pct(best.z.anteile[h]) + " der Tagesnutzung an.";
+    }
+  }
+
+  /* ---- Ereignisse ---- */
+  function beiMaus(e){
+    maus.x = e.clientX; maus.y = e.clientY; maus.zeit = performance.now();
+    const r = buehne.getBoundingClientRect();
+    maus.nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width / 2)));
+    maus.ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height / 2)));
+  }
+  function beiKlick(e){
+    const zu = e.target.closest(".bd-zu");
+    if(zu){ detailSchliessen(); return; }
+    const kanalKnopf = e.target.closest(".bd-kanal");
+    if(kanalKnopf){ const id = kanalKnopf.dataset.go; if(KANAELE[id]) wechsle(id); return; }
+    if(e.target === huelle){ detailSchliessen(); return; }
+    const karte = e.target.closest(".bob-karte");
+    if(karte){ detailOeffnen(karte.dataset.kanal); return; }
+    if(e.target.closest(".bob-blase")){ blaseZeigen(faktIdx + 1); }
+  }
+  function beiUeber(e){
+    const karte = e.target.closest && e.target.closest(".bob-karte");
+    const id = karte ? karte.dataset.kanal : null;
+    if(id !== hoverId){ hoverId = id; if(!detailId) fokus(id); }
+    const mix = e.target.closest && e.target.closest("[data-mix]");
+    if(!karte && !detailId) fokus(mix ? mix.dataset.mix : null);
+    if(mix && !hoverId){
+      const ziel = buehne.querySelector('.bob-karte[data-kanal="' + mix.dataset.mix + '"]');
+      if(ziel) kurzHinsehen(ziel, 900);
+    }
+  }
+  function beiFokus(e){
+    const karte = e.target.closest && e.target.closest(".bob-karte");
+    if(karte){ hoverId = karte.dataset.kanal; if(!detailId) fokus(hoverId); }
+  }
+  function beiTaste(e){
+    if(!aktiv) return;
+    if(e.key === "Escape" && detailId){ e.stopPropagation(); detailSchliessen(); return; }
+    /* Fokus bleibt in der geöffneten Detailansicht */
+    if(e.key === "Tab" && detailId){
+      const f = detail.querySelectorAll("button, [href], [tabindex]:not([tabindex='-1'])");
+      if(!f.length) return;
+      const erst = f[0], letzt = f[f.length - 1];
+      if(e.shiftKey && document.activeElement === erst){ e.preventDefault(); letzt.focus(); }
+      else if(!e.shiftKey && document.activeElement === letzt){ e.preventDefault(); erst.focus(); }
+    }
+  }
+  function beiSicht(){
+    sichtbar = !document.hidden;
+    if(sichtbar) weiter();
+  }
+  function leerlaufBlicke(){
+    /* Alle paar Sekunden schaut Bob im Leerlauf zu einer der Karten */
+    const jetzt = performance.now();
+    if(jetzt - maus.zeit > 3500 && !hoverId && !detailId && jetzt > leerlaufBis){
+      const kandidaten = karten.filter(function(el){ return !el.classList.contains("leer"); });
+      if(kandidaten.length && Math.random() < 0.5){
+        kurzHinsehen(kandidaten[Math.floor(Math.random() * kandidaten.length)], 1200);
+        leerlaufBis = jetzt + 5000;
+      }
+    }
+  }
+
+  function start(box){
+    stop();
+    root = box.querySelector(".bob");
+    buehne = box.querySelector(".bob-buehne");
+    if(!root || !buehne) return;
+    aktiv = true;
+    figur = buehne.querySelector(".bob-figur");
+    canvas = figur.querySelector("canvas");
+    img = figur.querySelector("img");
+    blase = buehne.querySelector(".bob-blase");
+    blaseText = blase.querySelector(".bob-blase-text");
+    blaseKanal = blase.querySelector(".bob-blase-kanal");
+    huelle = buehne.querySelector(".bob-huelle");
+    detail = buehne.querySelector(".bob-detail");
+    karten = Array.prototype.slice.call(buehne.querySelectorAll(".bob-karte"));
+    profile = bobProfile();
+    fakten = bobFakten(profile);
+    faktIdx = 0; detailId = null; hoverId = null; zielTemp = null;
+    bildLaden();
+    groesse();
+    uhr();
+    if(fakten.length){ blase.classList.add("laeuft"); markieren(fakten[0].id, "erzaehlt"); }
+
+    document.addEventListener("mousemove", beiMaus, {passive:true});
+    document.addEventListener("keydown", beiTaste, true);
+    document.addEventListener("visibilitychange", beiSicht);
+    root.addEventListener("click", beiKlick);
+    root.addEventListener("mouseover", beiUeber);
+    root.addEventListener("focusin", beiFokus);
+    root.addEventListener("mouseleave", function(){ hoverId = null; if(!detailId) fokus(null); });
+    if(window.ResizeObserver){ ro = new ResizeObserver(function(){ groesse(); }); ro.observe(buehne); }
+    else window.addEventListener("resize", groesse);
+    if(window.IntersectionObserver){
+      io = new IntersectionObserver(function(e){ sichtbar = e[0].isIntersecting && !document.hidden; if(sichtbar) weiter(); });
+      io.observe(buehne);
+    }
+    if(!REDUCED){
+      timer.push(setInterval(function(){ if(!detailId && !blase.matches(":hover")) blaseZeigen(faktIdx + 1); }, BOB.blaseTakt));
+      timer.push(setInterval(leerlaufBlicke, 2400));
+    }
+    timer.push(setInterval(uhr, 60000));
+    /* Nach dem Auftritt keine Einblend-Animation mehr, wenn Werte nachladen */
+    timer.push(setTimeout(function(){ if(buehne) buehne.classList.add("ruhig"); }, 2000));
+    weiter();
+  }
+
+  function stop(){
+    if(raf) cancelAnimationFrame(raf);
+    raf = 0;
+    timer.forEach(function(t){ clearTimeout(t); clearInterval(t); });
+    timer = [];
+    document.removeEventListener("mousemove", beiMaus);
+    document.removeEventListener("keydown", beiTaste, true);
+    document.removeEventListener("visibilitychange", beiSicht);
+    window.removeEventListener("resize", groesse);
+    if(ro){ ro.disconnect(); ro = null; }
+    if(io){ io.disconnect(); io = null; }
+    if(gl){
+      const aus = gl.getExtension("WEBGL_lose_context");
+      if(aus) aus.loseContext();
+    }
+    gl = null; glOk = false; bildDa = null; texturGroesse = "";
+    aktiv = false;
+  }
+
+  /* Neue Werte eines Kanals, ohne Bob neu aufzubauen */
+  function aktualisieren(){
+    if(!aktiv) return;
+    profile = bobProfile();
+    fakten = bobFakten(profile);
+    const mix = bobMix(profile);
+    buehne.querySelector(".bob-karten").innerHTML = bobKartenHTML(profile);
+    karten = Array.prototype.slice.call(buehne.querySelectorAll(".bob-karte"));
+    buehne.querySelector(".bob-ring").innerHTML = bobRingHTML(mix);
+    const unten = root.querySelector(".bob-unten");
+    unten.innerHTML = bobTagHTML(bobTagZeilen(profile), bobWocheZeilen(profile)) + bobMixHTML(mix);
+    unten.classList.add("still");
+    animate(unten);
+    uhr();
+    if(detailId && profile[detailId]) detail.innerHTML = bobDetailHTML(profile[detailId]);
+    if(fakten.length && faktIdx >= fakten.length) faktIdx = 0;
+    if(fakten.length && /^Das ist Bob\./.test(blaseText.textContent)) blaseZeigen(0);
+  }
+
+  return {start:start, stop:stop, aktualisieren:aktualisieren, aktiv:function(){ return aktiv; }};
+})();
 
 /* ============================================================
    14. RENDERING UND BEDIENUNG
@@ -6018,12 +7481,16 @@ function animate(scope){
 /* still = true: nach dem Nachladen ohne erneute Aufbau-Animation */
 function render(still){
   infoFenster.schliessen();
+  bobBuehne.stop();
   const k = kanalInfo();
   const istUebersicht = state.view === "overview";
+  const istPersona = state.view === "persona";
   document.getElementById("view-title").textContent =
-    istUebersicht ? "Alle Kanäle" : (k ? k.titel : "");
+    istUebersicht ? "Alle Kanäle" : istPersona ? "Ø-Fahrgast" : (k ? k.titel : "");
   document.getElementById("view-sub").textContent =
-    istUebersicht ? "Leitkennzahlen und Datenstand im Überblick" : (k ? k.untertitel : "");
+    istUebersicht ? "Leitkennzahlen und Datenstand im Überblick"
+    : istPersona ? "Bob, der durchschnittliche DSW21-Fahrgast · Ø der letzten 12 Monate aller Kanäle"
+    : (k ? k.untertitel : "");
 
   /* Filterleiste nur bei Kanälen mit Zeitreihe. Neue angebundene Kanäle
      tragen sich in KANAELE ein und erhalten sie damit automatisch. */
@@ -6044,11 +7511,13 @@ function render(still){
   const box = document.getElementById("views");
   box.classList.toggle("still", !!still);
   if(istUebersicht)  box.innerHTML = renderUebersicht();
+  else if(istPersona) box.innerHTML = personaSeite();
   else if(k)         box.innerHTML = hatDaten ? k.zeichnen() : leerHinweis(k.leerTitel, k.leerText);
   else               box.innerHTML = "";
 
   zeigeStatus();
   animate(box);
+  if(istPersona) bobBuehne.start(box);
   bindChartSwitch(box);
   bindUebersicht(box);
 }
@@ -6130,14 +7599,16 @@ function kanalLaden(id, modus){
     cacheSchreiben(id);
     GELADEN[id] = {zeit: Date.now(), quelle: "live"};
     setStatus("live", ladeMeldung(id, b), id);
-    if(state.view === id || state.view === "overview") render(state.view === "overview");
+    if(state.view === "persona") bobBuehne.aktualisieren();
+    else if(state.view === id || state.view === "overview") render(state.view === "overview");
   }).catch(function(err){
     /* Beim Öffnen genügt der Hinweis, dass noch nichts im Ordner liegt.
        Erst wenn jemand bewusst auf Aktualisieren geklickt hat, gehört
        die Ursache angezeigt. */
     if(modus === "start") setStatus("local", k.leerStatus, id);
     else                  setStatus("error", k.fehlerText + err.message, id);
-    if(state.view === id || state.view === "overview") render(state.view === "overview");
+    if(state.view === "persona") bobBuehne.aktualisieren();
+    else if(state.view === id || state.view === "overview") render(state.view === "overview");
   });
 }
 
@@ -6160,9 +7631,10 @@ function ladenStarten(ids, modus){
 }
 
 /* „Aktualisieren" lädt den Kanal neu, der gerade zu sehen ist — in der
-   Übersicht alle — und umgeht dabei den Zwischenspeicher. */
+   Übersicht und auf der Personen-Seite alle — und umgeht dabei den
+   Zwischenspeicher. */
 function refreshData(){
-  ladenStarten(state.view === "overview" ? kanalIds() : [state.view], "knopf");
+  ladenStarten(state.view === "overview" || state.view === "persona" ? kanalIds() : [state.view], "knopf");
 }
 refreshBtn.addEventListener("click", refreshData);
 document.getElementById("pdf-btn").addEventListener("click", alsPdf);
