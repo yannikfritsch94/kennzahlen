@@ -582,7 +582,16 @@
 #bmk-dash .kpi{display:flex;flex-direction:column;min-height:132px}
 #bmk-dash .kpi-grid .card{box-shadow:0 5px 20px rgba(0,0,0,.05)}
 /* gleiche Überschrift wie "Meistbesuchte Seiten" */
-#bmk-dash .kpi h2.label{align-items:flex-start;min-height:34px}
+#bmk-dash .kpi h2.label{align-items:flex-start;min-height:34px;padding-right:24px;-webkit-hyphens:auto;hyphens:auto}
+/* (i) oben rechts in der Kachel: öffnet die Erklärung zur Kennzahl */
+#bmk-dash .kpi-i{
+  position:absolute;top:13px;right:10px;width:24px;height:24px;padding:4px;
+  border:0;border-radius:50%;background:none;color:#b3b9c6;cursor:pointer;
+  display:grid;place-items:center;transition:color .16s,background .16s,transform .16s;
+}
+#bmk-dash .kpi-i svg{width:16px;height:16px;display:block}
+#bmk-dash .kpi-i:hover,#bmk-dash .kpi-i.offen{color:var(--blue);background:var(--blue-soft)}
+#bmk-dash .kpi-i:active{transform:scale(.92)}
 #bmk-dash .kpi .val{
   font-size:27px;font-weight:700;letter-spacing:-1px;margin-top:2px;
   font-variant-numeric:tabular-nums;transition:color .2s;
@@ -594,6 +603,10 @@
   font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
 }
 #bmk-dash .delta em{font-style:normal;color:var(--ink-3);font-weight:500}
+/* In schmalen Kacheln rutscht „vs. März 2026“ als Ganzes in die nächste Zeile,
+   statt Wert und Prozentzeichen auseinanderzureißen. */
+#bmk-dash .delta{flex-wrap:wrap;row-gap:1px}
+#bmk-dash .delta .dv{white-space:nowrap}
 #bmk-dash .delta.up{color:var(--up)}
 #bmk-dash .delta.down{color:var(--down)}
 #bmk-dash .delta.flat{color:var(--ink-3)}
@@ -732,6 +745,65 @@
 #bmk-dash .legend .lname{font-weight:500;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #bmk-dash .legend .lval{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
 #bmk-dash .legend .lpct{width:42px;text-align:right;color:var(--ink-3);font-weight:500;font-variant-numeric:tabular-nums}
+/* Nur Anteile (ohne absolute Zahl): der Anteil trägt die Zeile */
+#bmk-dash .legend .lpct.allein{margin-left:auto;width:auto;color:var(--ink);font-weight:700}
+
+/* Newsletter: Thema des Versands (oben, volle Breite) */
+#bmk-dash .nl-thema{display:flex;align-items:flex-start;gap:16px;padding:18px 22px;
+  background:linear-gradient(120deg,#f5f8ff 0%,var(--card) 55%)}
+#bmk-dash .nl-thema:hover{transform:none}
+#bmk-dash .nl-icon{flex:0 0 44px;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  background:var(--blue-soft);color:var(--blue)}
+#bmk-dash .nl-icon svg{width:22px;height:22px}
+#bmk-dash .nl-inhalt{min-width:0;flex:1}
+#bmk-dash .nl-kicker{display:block;font-size:11.5px;font-weight:600;color:var(--ink-3);letter-spacing:.1px}
+#bmk-dash .nl-betreff{font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1.3;color:var(--ink);margin:3px 0 12px}
+#bmk-dash .nl-themen{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+#bmk-dash .nl-label{font-size:11.5px;color:var(--ink-3);margin-right:4px}
+#bmk-dash .nl-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 6px 5px 11px;border-radius:20px;
+  background:var(--card);border:1px solid #e3e8f6;font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+#bmk-dash .nl-chip b{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:2px 7px;border-radius:12px}
+#bmk-dash .nl-fehlt{font-size:12px;color:var(--ink-3);margin:-4px 4px 0}
+
+/* Newsletter: Versand als Trichter */
+#bmk-dash .trichter{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+#bmk-dash .tr-stufe{display:grid;grid-template-columns:78px minmax(0,1fr) auto;align-items:center;gap:12px}
+#bmk-dash .tr-name{font-size:13px;font-weight:500;color:var(--ink-2)}
+#bmk-dash .tr-bahn{height:22px;border-radius:8px;background:var(--blue-faint);overflow:hidden}
+#bmk-dash .tr-bahn span{display:block;height:100%;width:0;border-radius:8px;transition:width .9s cubic-bezier(.2,.7,.3,1)}
+#bmk-dash .tr-stufe.s0 .tr-bahn span{background:#9db8ff}
+#bmk-dash .tr-stufe.s1 .tr-bahn span{background:#6d95fb}
+#bmk-dash .tr-stufe.s2 .tr-bahn span{background:#3b6ef6}
+#bmk-dash .tr-stufe.s3 .tr-bahn span{background:var(--blue)}
+#bmk-dash .tr-wert{text-align:right;min-width:128px}
+#bmk-dash .tr-wert b{display:block;font-size:14px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+#bmk-dash .tr-wert em{display:block;font-style:normal;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+#bmk-dash .nl-meta{gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+#bmk-dash .split.right.nl-versand .legend{flex:0 0 auto}
+
+/* App: Neuinstallationen einordnen */
+#bmk-dash .eo-zahlen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+#bmk-dash .eo-zahlen div{background:var(--blue-faint);border-radius:14px;padding:11px 12px;min-width:0}
+#bmk-dash .eo-zahlen b{display:block;font-size:19px;font-weight:700;letter-spacing:-.5px;color:var(--ink);line-height:1.25}
+#bmk-dash .eo-zahlen b.up{color:#0f9c62}
+#bmk-dash .eo-zahlen b.down{color:var(--down)}
+#bmk-dash .eo-zahlen span{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;line-height:1.35}
+#bmk-dash .eo-liste{list-style:none;display:flex;flex-direction:column;gap:8px}
+#bmk-dash .eo-liste li{position:relative;padding-left:16px;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+#bmk-dash .eo-liste li::before{content:"";position:absolute;left:3px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+#bmk-dash .eo-liste b{color:var(--ink);font-weight:600}
+
+/* Spitzenlast gegenüber der Lizenz (WLAN) */
+#bmk-dash .lizenz{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+#bmk-dash .lizenz-kopf{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:13px;color:var(--ink-2);margin-bottom:9px}
+#bmk-dash .lizenz-kopf b{font-size:15px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+#bmk-dash .lizenz-bahn{height:9px;border-radius:20px;background:var(--blue-faint);overflow:hidden}
+#bmk-dash .lizenz-bahn span{display:block;height:100%;width:0;border-radius:20px;
+  background:linear-gradient(90deg,#9db8ff,var(--blue));transition:width .9s cubic-bezier(.2,.7,.3,1)}
+#bmk-dash .lizenz-bahn.knapp{background:rgba(245,163,0,.14)}
+#bmk-dash .lizenz-bahn.knapp span{background:var(--warn)}
+#bmk-dash .lizenz-bahn.kritisch{background:rgba(255,62,19,.10)}
+#bmk-dash .lizenz-bahn.kritisch span{background:var(--down)}
 
 /* KI-Kachel (Signature) */
 #bmk-dash .ai{grid-column:span 4;background:linear-gradient(140deg,#3b6ef6 0%,#2f5be0 100%);border-color:transparent;color:#fff}
@@ -907,6 +979,7 @@
   #bmk-dash .card:hover{transform:none;box-shadow:none}
   #bmk-dash .grid > *,#bmk-dash .ov > *{animation:none!important}
   #bmk-dash .ov-knopf,#bmk-dash .kwahl{display:none}
+  #bmk-dash .kpi-i{display:none}
   #bmk-dash .kpi{min-height:0}
   #bmk-dash .kpi .val{font-size:20px}
   #bmk-dash .spark{height:26px}
@@ -1031,6 +1104,56 @@
   #bmk-export,#bmk-export .sheet{animation:none}
   #bmk-export *{transition:none!important}
 }
+
+/* ============================================================
+   Erklärfenster zum (i) in den Kacheln. Liegt wie der Export-Dialog
+   am <body>, deshalb eigene Variablen.
+   ============================================================ */
+#bmk-info{
+  --blue:#1b59f8;--blue-soft:rgba(27,89,248,.10);--blue-faint:#f2f7ff;
+  --ink:#151e23;--ink-2:#4d4d4d;--ink-3:#838383;--line:#eff0f6;--card:#ffffff;
+  position:fixed;z-index:9998;box-sizing:border-box;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 24px 60px rgba(14,24,52,.20),0 3px 10px rgba(14,24,52,.06);
+  padding:14px 16px 13px;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:13px;line-height:1.5;color:var(--ink-2);-webkit-font-smoothing:antialiased;
+  transform-origin:var(--pfeil,90%) 0;
+}
+#bmk-info.oben{transform-origin:var(--pfeil,90%) 100%}
+#bmk-info[hidden]{display:none}
+#bmk-info *{box-sizing:border-box;margin:0;padding:0}
+#bmk-info.rein{animation:bmk-info-rein .18s cubic-bezier(.2,.7,.3,1)}
+@keyframes bmk-info-rein{from{opacity:0;transform:translateY(-4px) scale(.97)}to{opacity:1;transform:none}}
+#bmk-info::before{
+  content:"";position:absolute;top:-6px;left:calc(var(--pfeil,90%) - 6px);width:12px;height:12px;
+  background:var(--card);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);
+}
+#bmk-info.oben::before{top:auto;bottom:-6px;transform:rotate(225deg)}
+#bmk-info .i-kopf{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+#bmk-info .i-kanal{font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-3)}
+#bmk-info .i-zu{
+  margin-left:auto;width:26px;height:26px;border:0;border-radius:8px;background:none;color:var(--ink-3);
+  cursor:pointer;display:grid;place-items:center;transition:background .14s,color .14s;
+}
+#bmk-info .i-zu:hover{background:#f2f4f8;color:var(--ink)}
+#bmk-info .i-zu svg{width:14px;height:14px}
+#bmk-info h3{font-size:15px;font-weight:700;letter-spacing:-.2px;color:var(--ink);margin-bottom:8px;line-height:1.3}
+#bmk-info .i-text{color:var(--ink-2)}
+#bmk-info .i-text + .i-zitat{margin-top:8px}
+#bmk-info .i-zitat{
+  border-left:3px solid var(--blue);background:var(--blue-faint);border-radius:0 10px 10px 0;
+  padding:8px 11px;color:var(--ink);font-style:normal;
+}
+#bmk-info .i-aktuell{margin-top:9px;font-weight:600;color:var(--ink)}
+#bmk-info .i-hinweis{margin-top:10px;font-size:12.5px}
+#bmk-info .i-hinweis b{color:var(--ink);font-weight:600}
+#bmk-info .i-quelle{margin-top:11px;padding-top:9px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3)}
+#bmk-info .i-quelle a{color:var(--blue);font-weight:600;text-decoration:none;white-space:nowrap}
+#bmk-info .i-quelle a:hover{text-decoration:underline}
+#bmk-info :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media print{ #bmk-info{display:none!important} }
+@media (prefers-reduced-motion:reduce){ #bmk-info.rein{animation:none} }
 </style>
 </head>
 <body>
@@ -1118,6 +1241,10 @@
       <button class="navitem" data-view="wlan">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M2.5 9a15 15 0 0 1 19 0M6 12.8a10 10 0 0 1 12 0M9.4 16.5a5 5 0 0 1 5.2 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg>
         Bus-WLAN
+      </button>
+      <button class="navitem" data-view="wlancity">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="1.6" fill="currentColor" stroke="none"/><path d="M12 12.6v7.9M9 20.5h6"/><path d="M8.9 13.1a4.4 4.4 0 0 1 0-6.2M15.1 6.9a4.4 4.4 0 0 1 0 6.2"/><path d="M6.1 15.9a8.4 8.4 0 0 1 0-11.8M17.9 4.1a8.4 8.4 0 0 1 0 11.8"/></svg>
+        WLAN-City
       </button>
       <button class="navitem" data-view="chat">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4.5L7 17.2A8 8 0 1 1 21 12Z"/></svg>
@@ -1268,7 +1395,7 @@ function deltaHTML(key, now, before, compareLabel){
   const cls = good ? "up" : "down";
   const tri = rising ? "▲" : "▼";
   const val = nf.format(Math.abs(rounded)) + " %";
-  return '<span class="delta ' + cls + '"><span class="tri">' + tri + '</span>' + val +
+  return '<span class="delta ' + cls + '"><span class="tri">' + tri + '</span><span class="dv">' + val + '</span>' +
          ' <em>vs. ' + esc(compareLabel) + '</em></span>';
 }
 
@@ -1314,6 +1441,15 @@ function leereKachel(klasse, titel, text){
    Ein neuer Kanal braucht deshalb genau einen Block wie die drei
    unten — an der Shell ist nichts zu ändern.
    ============================================================ */
+/* bus-und-bahn.de: Matomo zählt Besuche und Eindeutige Besucher derzeit
+   fast gleich hoch. Solange das intern geprüft wird, zeigt das Dashboard
+   für die Website nur die Eindeutigen Besucher — in Kacheln, Diagrammen,
+   Übersicht, Auffälligkeiten und Export. Aufteilungen, die Matomo nur je
+   Besuch liefert (Herkunft, Geräte, Suchmaschinen …), stehen dann als
+   Anteile statt als Besuchszahlen da. Auf false setzen, sobald die
+   Zählung wieder stimmt: Dann erscheint alles wieder wie vorher. */
+const WEB_NUR_BESUCHER = true;
+
 const state = {
   view: "overview",
   month: null,          /* bus-und-bahn.de */
@@ -1321,13 +1457,15 @@ const state = {
   monthNews: null,      /* Newsletter */
   monthNetz: null,      /* Interaktiver Liniennetzplan */
   monthWlan: null,      /* Bus-WLAN */
+  monthWlanCity: null,  /* WLAN-City */
   monthChat: null,      /* Chatbot */
   compare: {},          /* je Kanal die gewählte Vergleichsart */
-  chartMetric: "visits",
+  chartMetric: WEB_NUR_BESUCHER ? "visitors" : "visits",
   chartMetricApp: "activeUsers",
   chartMetricNews: "recipients",
   chartMetricNetz: "visits",
   chartMetricWlan: "sessions",
+  chartMetricWlanCity: "sessions",
   chartMetricChat: "anfragen",
   ovKanal: null,        /* Übersicht: Kanal im Jahresvergleich */
   ovMetrik: null        /* Übersicht: Kennzahl im Jahresvergleich */
@@ -1336,7 +1474,7 @@ const state = {
 const KANAELE = {};
 const kanalIds = () => Object.keys(KANAELE);
 /* Reihenfolge wie in der Seitenleiste */
-const KANAL_ORDNUNG = ["web","app","news","netz","wlan","chat"];
+const KANAL_ORDNUNG = ["web","app","news","netz","wlan","wlancity","chat"];
 function kanalListe(){
   const ids = kanalIds();
   return KANAL_ORDNUNG.filter(function(id){ return ids.indexOf(id) > -1; })
@@ -1399,7 +1537,7 @@ function vergleich(id){
    ============================================================ */
 const SPEICHER = {
   schluessel: "bmk-kennzahlen",
-  version: 4,                        /* hochzählen, wenn sich die Datenstruktur ändert */
+  version: 5,                        /* hochzählen, wenn sich die Datenstruktur ändert */
   frist: 12 * 60 * 60 * 1000         /* nach einem halben Tag wird ohnehin neu gelesen */
 };
 
@@ -1679,7 +1817,9 @@ function kpiRaster(id, cur, cmp, cmpLabel){
     const kind = def.kind || "num";
     const wert = cur.kpi ? cur.kpi[def.key] : null;
     const out  = FORMATTERS[kind];
-    const kopf = '<div class="card kpi"><h2 class="label">' + esc(def.label) + '</h2>';
+    /* Kennzahlen mit hinterlegter Erklärung bekommen oben rechts ein (i). */
+    const kopf = '<div class="card kpi"><h2 class="label">' + esc(def.label) + '</h2>' +
+                 infoKnopf(id, def.key, def.label);
     if(!hatWert(wert)){
       return kopf + '<div class="val">—</div>' +
              '<span class="delta flat"><em>' + esc(k.fehltText) + '</em></span></div>';
@@ -1696,6 +1836,8 @@ function kpiRaster(id, cur, cmp, cmpLabel){
    Auswahl stehen, sagt der Kanal über chart.metriken. */
 function jahresChart(id){
   const k = kanal(id), d = k.daten(), monat = state[k.monatFeld];
+  /* Gemerkte Kennzahl, die der Kanal nicht (mehr) anbietet: erste nehmen. */
+  if(!k.chart.metriken[state[k.chart.feld]]) state[k.chart.feld] = Object.keys(k.chart.metriken)[0];
   const aktiv = state[k.chart.feld];
   const art   = (k.chart.art && k.chart.art[aktiv]) || "num";
   const out   = FORMATTERS[art] || fmt;
@@ -1732,7 +1874,7 @@ function jahresChart(id){
 
 /* Freie Balkenreihe — gleiche Optik wie der Jahresverlauf, aber mit
    beliebigen Punkten (Tage, Stunden, Wochentage).
-   punkte: {label, wert, tipp} */
+   punkte: {label, wert, tipp, zusatz, aktiv} · o.einheit hinter dem Wert im Tooltip */
 function balkenReihe(o){
   const punkte = (o.punkte || []).filter(function(p){ return p; });
   if(!punkte.length) return leereKachel("chart " + (o.klasse || ""), o.titel, o.leerText ||
@@ -1741,9 +1883,10 @@ function balkenReihe(o){
   const out = FORMATTERS[o.kind || "num"] || fmt;
   const balken = punkte.map(function(p){
     const hat = hatWert(p.wert);
-    return '<div class="bar' + (hat ? "" : " empty") + '">' +
+    return '<div class="bar' + (hat ? "" : " empty") + (p.aktiv ? " active" : "") + '">' +
       '<div class="track">' +
-        (hat ? '<div class="tip">' + esc(p.tipp || p.label) + ': ' + out(p.wert) + '</div>' : '') +
+        (hat ? '<div class="tip">' + esc(p.tipp || p.label) + ': ' + out(p.wert) + (o.einheit ? ' ' + esc(o.einheit) : '') +
+               (p.zusatz ? ' · ' + esc(p.zusatz) : '') + '</div>' : '') +
         '<div class="fill" data-h="' + (hat ? Math.max(2, p.wert / max * 100) : 0) + '"></div>' +
       '</div><div class="mlabel">' + esc(p.label) + '</div></div>';
   }).join("");
@@ -1781,7 +1924,8 @@ function rangKachel(o){
 const CH_COLORS  = ["#3b6ef6","#7aa0fa","#a9c2fc","#cfdcfe","#e6ecfe"];
 const DEV_COLORS = ["#3b6ef6","#8ab0fb","#bed0fd","#e2e9fe"];
 
-/* Gestapelter Balken mit Legende. eintraege: [[name, wert], …] */
+/* Gestapelter Balken mit Legende. eintraege: [[name, wert], …]
+   nurAnteil: Legende ohne absolute Zahlen, nur mit Anteilen. */
 function verteilung(o){
   const eintraege = (o.eintraege || []).filter(e => hatWert(e[1]) && e[1] > 0);
   if(!eintraege.length) return leereKachel(o.klasse, o.titel, o.leerText);
@@ -1792,16 +1936,372 @@ function verteilung(o){
   const legende = eintraege.map((e,i) =>
     '<div><span class="dot" style="background:' + farben[i % farben.length] + '"></span>' +
     '<span class="lname">' + esc(e[0]) + '</span>' +
-    '<span class="lval">' + fmt(e[1]) + '</span>' +
-    '<span class="lpct">' + (o.nachkomma ? dec1(e[1]/summe*100) : anteil(e[1], summe)) + ' %</span></div>').join("");
+    (o.nurAnteil ? '' : '<span class="lval">' + fmt(e[1]) + '</span>') +
+    '<span class="lpct' + (o.nurAnteil ? ' allein' : '') + '">' +
+      (o.nachkomma ? dec1(e[1]/summe*100) : anteil(e[1], summe)) + ' %</span></div>').join("");
   return '<div class="card ' + o.klasse + '">' +
     '<div class="card-head"><h2>' + esc(o.titel) + '</h2>' +
     '<span class="card-note">' + esc(o.note || "") + '</span></div>' +
     '<div class="stack">' + stack + '</div>' +
     '<div class="legend">' + legende + '</div>' +
     (o.hinweis ? '<p class="hint">' + esc(o.hinweis) + '</p>' : '') +
+    (o.nachsatz || '') +
   '</div>';
 }
+
+/* ============================================================
+   5b. ERKLÄRUNGEN ZU DEN KENNZAHLEN (das kleine „i“ in den Kacheln)
+
+   Je Kanal und Kennzahl: was sie laut Quelle bedeutet. Wo die Quelle
+   einen eigenen Erklärtext mitbringt (Matomo, AWStats), steht er
+   wörtlich als Zitat. Google Analytics und CleverReach sind sinngemäß
+   und inhaltlich genau übernommen; Werte, die das Dashboard selbst
+   rechnet (WLAN, Chatbot), beschreiben den Rechenweg aus diesem Code.
+
+     zitat    wörtlicher Erklärtext der Quelle (in Anführungszeichen)
+     text     Definition in eigenen Worten bzw. Rechenweg
+     hinweis  Einordnung: worauf man beim Lesen achten sollte
+     aktuell  optional: Satz mit Werten des gewählten Monats
+     quelle   {name, art, url}
+   ============================================================ */
+const Q = {
+  matomo:    {name:"Matomo", art:"Erklärtext aus der Matomo-Oberfläche (deutsche Fassung)",
+              url:"https://matomo.org/faq/reports/visitors-overview/"},
+  matomoUV:  {name:"Matomo", art:"Erklärtext aus der Matomo-Oberfläche (deutsche Fassung)",
+              url:"https://matomo.org/faq/general/faq_43/"},
+  matomoV:   {name:"Matomo", art:"Erklärtext aus der Matomo-Oberfläche (deutsche Fassung)",
+              url:"https://matomo.org/faq/general/faq_36/"},
+  matomoG:   {name:"Matomo", art:"Erklärtext aus der Matomo-Oberfläche (deutsche Fassung)",
+              url:"https://glossary.matomo.org/"},
+  gaNutzer:  {name:"Google Analytics für Firebase", art:"Hilfeartikel „Nutzermesswerte“, sinngemäß",
+              url:"https://support.google.com/analytics/answer/12253918?hl=de"},
+  gaEvent:   {name:"Google Analytics für Firebase", art:"Hilfeartikel „Automatisch erfasste Ereignisse“, sinngemäß",
+              url:"https://support.google.com/analytics/answer/9234069?hl=de"},
+  gaSitzung: {name:"Google Analytics für Firebase", art:"Hilfeartikel „Analytics-Sitzungen“, sinngemäß",
+              url:"https://support.google.com/analytics/answer/9191807?hl=de"},
+  cr:        {name:"CleverReach", art:"Berechnung laut CleverReach, sinngemäß",
+              url:"https://www.cleverreach.com/de-de/push-magazin/newsletter-reporting-und-tracking/oeffnungsraten-abmelderaten-klickraten/"},
+  crBounce:  {name:"CleverReach", art:"Begriffserklärung von CleverReach, sinngemäß",
+              url:"https://www.cleverreach.com/de-de/push-magazin/email-marketing-strategie-tipps/definitionen-e-mail-marketing/hardbounce-eine-definition-bzw-bedeutung/"},
+  crBericht: {name:"CleverReach", art:"Feld aus dem Versandbericht (CSV)", url:null},
+  aw:        {name:"AWStats", art:"Erklärtext aus dem AWStats-Bericht (deutsche Originalfassung)",
+              url:"https://awstats.sourceforge.io/docs/awstats_glossary.html"},
+  awGlossar: {name:"AWStats", art:"AWStats-Glossar, sinngemäß",
+              url:"https://awstats.sourceforge.io/docs/awstats_glossary.html"},
+  wlan:      {name:"Monatsbericht Fahrgast-WLAN", art:"Wert aus dem Bericht", url:null},
+  rechnung:  {name:"Dieses Dashboard", art:"Berechnung aus den Werten des Berichts", url:null},
+  chat:      {name:"chatbot.xlsx", art:"Berechnung im Dashboard", url:null}
+};
+
+const KPI_INFO = {
+  web: {
+    visitors: {
+      zitat: "Die Anzahl der eindeutigen Besucher auf der Webseite. Jeder Benutzer wird nur einmal gezählt, auch wenn er die Webseite mehrmals täglich besucht hat.",
+      hinweis: "Im Monatsbericht zählt jeder Besucher einmal im Monat. Wiedererkannt wird er über das Matomo-Cookie. " +
+               "Ohne Cookie bildet Matomo einen Fingerabdruck aus Gerätemerkmalen, der standardmäßig jeden Tag neu entsteht – " +
+               "dieselbe Person zählt dann an jedem Besuchstag erneut." +
+               (WEB_NUR_BESUCHER ? " Das Dashboard zeigt für bus-und-bahn.de derzeit nur diese Kennzahl, weil Besuche und " +
+                                   "Eindeutige Besucher fast gleich hoch ausfallen." : ""),
+      quelle: Q.matomoUV },
+    visits: {
+      zitat: "Wenn ein Besucher zum ersten Mal die Webseite besucht oder seit dem letzten Seitenaufruf mehr als 30 Minuten vergangen sind, wird dies als neue Sitzung gewertet.",
+      hinweis: "Standardmäßig beginnt in Matomo außerdem um Mitternacht ein neuer Besuch.",
+      quelle: Q.matomoV },
+    pageviews: {
+      zitat: "Die Anzahl der Seitenaufrufe.",
+      hinweis: "Jeder Aufruf zählt – auch wenn dieselbe Seite im selben Besuch mehrmals geöffnet wird. In der Rangliste " +
+               "„Meistbesuchte Seiten“ stehen dagegen Eindeutige Seitenansichten: Dort zählt eine Seite nur einmal pro Besuch.",
+      quelle: Q.matomoG },
+    downloads: {
+      zitat: "Als Download wird in Matomo der Klick auf einen Downloadlink gewertet. Ob der Download abgeschlossen wurde oder nicht, ist Matomo nicht bekannt.",
+      hinweis: "Gezählt wird jeder Klick, auch mehrere Klicks auf dieselbe Datei im selben Besuch.",
+      quelle: Q.matomoG },
+    avgTime: {
+      zitat: "Durchschnittliche Besuchsdauer.",
+      hinweis: "Matomo misst je Besuch die Zeit vom ersten bis zum letzten erfassten Aufruf. Wer nur eine Seite ansieht, " +
+               "geht standardmäßig mit 0 Sekunden in den Schnitt ein.",
+      quelle: Q.matomo },
+    bounce: {
+      zitat: "Der Anteil der Besuche, bei denen nur eine Seite aufgerufen wurde. Dies bedeutet, dass der Besucher die Webseite auf der Eingangsseite sofort wieder verlassen hat.",
+      hinweis: "Niedriger gilt als besser. Auf Serviceseiten wie den Verkehrsmeldungen kann ein Absprung aber auch heißen: " +
+               "Information gefunden, Besuch erledigt.",
+      quelle: Q.matomo },
+    searches: {
+      text: "Anzahl der Suchen, die Besucher über die Suchfunktion von bus-und-bahn.de abgeschickt haben. Jede Suche zählt einzeln. " +
+            "Matomo führt sie als eigene Aktion:",
+      zitat: "Aktionen sind Seitenansichten, Downloads, der Aufruf von ausgehenden Verweisen und interne Suchen.",
+      hinweis: "Welche Begriffe gesucht wurden, zeigt die Kachel „Interne Suchbegriffe“ weiter unten.",
+      quelle: Q.matomoG }
+  },
+
+  app: {
+    activeUsers: {
+      text: "Anzahl der verschiedenen Nutzer, die die App im Monat verwendet haben. Als aktiv zählt, wer eine Sitzung mit " +
+            "Interaktion hatte (länger als 10 Sekunden, mit Schlüsselereignis oder mit mindestens zwei Bildschirmaufrufen) " +
+            "oder für wen Analytics das Ereignis first_open bzw. Interaktionszeit erfasst hat – bei Android first_open " +
+            "oder den Parameter engagement_time_msec, bei iOS first_open oder das Ereignis user_engagement.",
+      hinweis: "Aktive Nutzer sind kein Bestand: Wer die App installiert hat, sie im Monat aber nicht nutzt, zählt nicht mit. " +
+               "Neuinstallationen erhöhen die Zahl in den Folgemonaten nur, wenn diese Nutzer wiederkommen.",
+      quelle: Q.gaNutzer },
+    installs: {
+      text: "Anzahl des Ereignisses first_open. Es wird ausgelöst, wenn ein Nutzer die App nach der Installation oder " +
+            "Neuinstallation zum ersten Mal startet – nicht schon beim Herunterladen.",
+      hinweis: "Auch bestehende Nutzer lösen first_open erneut aus, etwa nach einem Gerätewechsel oder wenn sie die App " +
+               "gelöscht und neu installiert haben. Neuinstallationen sind deshalb nicht gleich neue Nutzer. Reine " +
+               "Download-Zahlen stehen in der Google Play Console und in App Store Connect.",
+      quelle: Q.gaEvent },
+    sessions: {
+      text: "Anzahl der Sitzungen, die in der App begonnen haben (Ereignis session_start). Eine Sitzung endet " +
+            "standardmäßig nach 30 Minuten ohne Aktivität.",
+      quelle: Q.gaSitzung },
+    screenViews: {
+      text: "Anzahl des Ereignisses screen_view. Es wird bei einem Bildschirmwechsel ausgelöst, wenn sich Bildschirmname, " +
+            "Bildschirmklasse oder Bildschirm-ID gegenüber dem vorherigen Bildschirm ändern oder zuvor noch keiner gesetzt war.",
+      hinweis: "Wiederholte Aufrufe desselben Bildschirms werden mitgezählt.",
+      quelle: Q.gaEvent },
+    uninstalls: {
+      text: "Anzahl des Ereignisses app_remove. Es wird ausgelöst, wenn die App von einem Android-Gerät entfernt " +
+            "(deinstalliert) wird – unabhängig davon, woher sie installiert wurde.",
+      hinweis: "Nur Android: Für iPhones erfasst Firebase keine Deinstallationen. Neuinstallationen (iOS und Android) und " +
+               "Deinstallationen (nur Android) lassen sich deshalb nicht direkt gegeneinander rechnen.",
+      quelle: Q.gaEvent },
+    crashes: {
+      text: "Anzahl der von Firebase erfassten App-Abstürze. In Google Analytics heißt das zugehörige Ereignis " +
+            "app_exception; es wird ausgelöst, wenn die App abstürzt oder eine Ausnahme auslöst.",
+      hinweis: "Weniger ist besser. Die Ursachen einzelner Abstürze stehen in Firebase Crashlytics.",
+      quelle: Q.gaEvent }
+  },
+
+  news: {
+    recipients: {
+      text: "Anzahl der Empfänger, an die dieser Versand ging – vor Abzug der Bounces. Im Bericht: „Total Recipients“ " +
+            "bzw. „Empfänger gesamt“.",
+      quelle: Q.crBericht },
+    delivered: {
+      text: "Empfänger abzüglich der Bounces – also die E-Mails, die nicht zurückgewiesen wurden. Auf diese Zahl beziehen " +
+            "sich Öffnungsrate und Abmelderate.",
+      quelle: Q.cr },
+    openRate: {
+      text: "Eindeutige Öffnungen im Verhältnis zu den zugestellten E-Mails: geöffnete E-Mails ÷ (versendete E-Mails − Bounces) × 100.",
+      hinweis: "Gemessen wird über ein unsichtbares Zählpixel. Datenschutzfunktionen wie Apple Mail Privacy Protection " +
+               "laden dieses Pixel teils automatisch – die Öffnungsrate kann deshalb höher ausfallen als die Zahl der " +
+               "tatsächlich gelesenen Newsletter.",
+      quelle: Q.cr },
+    clickRate: {
+      text: "Eindeutige Klicks im Verhältnis zu den geöffneten E-Mails. CleverReach bezieht die Klickrate auf die Öffner " +
+            "(auch Click-to-Open-Rate genannt), nicht auf alle Empfänger.",
+      aktuell: function(cur){
+        return hatWert(cur.kpi.clickRateDeliv)
+          ? "Auf alle zugestellten E-Mails gerechnet liegt sie in diesem Versand bei " + pct(cur.kpi.clickRateDeliv) + "." : "";
+      },
+      quelle: Q.cr },
+    bounceRate: {
+      text: "Anteil der Bounces an allen Empfängern des Versands. Bounces sind E-Mails, die nicht zugestellt werden " +
+            "konnten – dauerhaft (Hardbounce, z. B. weil die Adresse nicht existiert) oder vorübergehend (Softbounce, " +
+            "z. B. weil das Postfach voll ist).",
+      hinweis: "Niedriger ist besser.",
+      quelle: Q.crBounce },
+    unsubscribes: {
+      text: "Anzahl der Empfänger, die sich über diesen Versand vom Newsletter abgemeldet haben.",
+      hinweis: "Die Abmelderate bezieht CleverReach auf die zugestellten E-Mails: Abmeldungen ÷ (versendete E-Mails − Bounces) × 100.",
+      aktuell: function(cur){
+        return hatWert(cur.kpi.unsubscribeRate) ? "Abmelderate dieses Versands: " + pct(cur.kpi.unsubscribeRate) + "." : "";
+      },
+      quelle: Q.cr }
+  },
+
+  netz: {
+    visitors: {
+      zitat: "Anzahl der Rechner (IP-Adressen), die Ihre Web Site besuchten und mindestens eine Seite aufgerufen haben.",
+      hinweis: "Jede IP-Adresse zählt einmal im Monat. Mehrere Personen hinter derselben IP (etwa in einem Firmen- oder " +
+               "Mobilfunknetz) zählen als ein Besucher; wechselt die IP, zählt dieselbe Person mehrfach.",
+      quelle: Q.aw },
+    visits: {
+      text: "Alle Besuche aller Besucher im Monat. Ein Besuch umfasst die Seitenaufrufe einer IP-Adresse, zwischen denen " +
+            "weniger als eine Stunde liegt; nach einer Stunde ohne Aufruf beginnt ein neuer Besuch.",
+      quelle: Q.awGlossar },
+    pages: {
+      zitat: "Anzahl der insgesamt angezeigten Seiten Ihrer Web Site (Summe aller Zugriffe von allen Besuchern). Diese Zahl unterscheidet sich von den „Zugriffen“, da nur HTML Seiten und keine Grafiken oder andere Dateien gezählt werden.",
+      quelle: Q.aw },
+    avgTime: {
+      text: "Die Zeit, die ein Besucher je Besuch auf netzplan-dortmund.de verbracht hat, gemittelt über alle Besuche des " +
+            "Monats (Abschnitt „Aufenthaltsdauer“ im Bericht).",
+      hinweis: "Nicht für jeden Besuch lässt sich eine Dauer bestimmen – etwa wenn der Besuch bei der Auswertung noch lief " +
+               "oder in der letzten Stunde des Monats begann.",
+      quelle: Q.awGlossar },
+    pagesPerVisit: {
+      text: "Seitenaufrufe geteilt durch die Anzahl der Besuche – so weist es AWStats im Kopf des Berichts aus („Seiten/Besuch“).",
+      quelle: Q.awGlossar },
+    bytes: {
+      zitat: "Dieser Wert entspricht der Menge an Daten, die aufgrund aller Seiten, Grafiken und Dateien Ihrer Web Site übertragen worden sind.",
+      hinweis: "Ohne technische Protokolldaten (HTTP-Header, TCP/IP). Deshalb liegt der Wert meist unter dem, was der " +
+               "Provider als Datenverkehr misst.",
+      quelle: Q.aw }
+  },
+
+  /* gilt für Bus-WLAN und WLAN-City (infoGruppe "wlan") */
+  wlan: {
+    sessions: {
+      text: "Summe aller Sitzungen aus der Tabelle „Sitzungen nach Profil“ des Monatsberichts. Eine eigene Gesamtzahl " +
+            "weist der Bericht nicht aus; die Profiltabelle deckt den ganzen Monat ab.",
+      quelle: Q.rechnung },
+    maxActive: {
+      text: "Der Wert, den der Monatsbericht als „Maximum aktiver Sitzungen“ ausweist.",
+      hinweis: "Nicht zu verwechseln mit den gleichzeitig verbundenen Geräten (Kachel „Max. gleichzeitige Nutzer“).",
+      quelle: Q.wlan },
+    logins: {
+      text: "Anzahl der eindeutigen Logins im Monat, wie sie der Monatsbericht ausweist.",
+      quelle: Q.wlan },
+    devices: {
+      text: "Anzahl der verschiedenen Geräte im Monat, erkannt an ihrer MAC-Adresse – so weist es der Monatsbericht aus.",
+      hinweis: "Viele Smartphones melden sich mit einer privaten, zufälligen WLAN-Adresse an und wechseln sie teils " +
+               "regelmäßig. Ein Gerät kann dann mehrfach gezählt werden.",
+      quelle: Q.wlan },
+    maxConcurrent: {
+      text: "Die höchste Zahl gleichzeitig verbundener Geräte im Monat, wie sie der Monatsbericht ausweist.",
+      hinweis: "Der Bericht setzt sie ins Verhältnis zur installierten Lizenz – siehe Messbalken unter den Benutzerprofilen.",
+      quelle: Q.wlan },
+    sessionsPerDevice: {
+      text: "Sitzungen im Monat geteilt durch die verschiedenen Geräte im Monat.",
+      quelle: Q.rechnung }
+  },
+
+  chat: {
+    anfragen: {
+      text: "Anzahl der Anfragen im Blatt „nur Anfragen“. Eine Anfrage mit mehreren Kategorie-Treffern steht dort in " +
+            "mehreren Zeilen und zählt hier einmal – erkannt an System-ID, Anfragetext, Datum und Uhrzeit.",
+      quelle: Q.chat },
+    konversationen: {
+      text: "Anzahl der Konversationen im Blatt „ohne ID-Duplikate“: Jede Kombination aus System-ID und Uhrzeit zählt einmal.",
+      quelle: Q.chat },
+    proKonversation: {
+      text: "Anfragen im Monat geteilt durch Konversationen im Monat.",
+      quelle: Q.chat },
+    proTag: {
+      text: "Anfragen im Monat geteilt durch die Zahl der Tage, an denen mindestens eine Anfrage einging.",
+      quelle: Q.chat },
+    peakTag: {
+      text: "Die höchste Zahl an Anfragen an einem einzelnen Tag des Monats. Das Datum steht unter dem Jahresverlauf.",
+      quelle: Q.chat },
+    themen: {
+      text: "Anzahl verschiedener Kategorien, denen Anfragen im Monat zugeordnet wurden – gezählt wie im Blatt " +
+            "„Nutzung Kategorien“, einschließlich „(Leer)“, wenn es vorkommt.",
+      quelle: Q.chat }
+  }
+};
+
+function kpiInfo(id, key){
+  const k = KANAELE[id];
+  const gruppe = KPI_INFO[(k && k.infoGruppe) || id];
+  return gruppe ? gruppe[key] || null : null;
+}
+const INFO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" ' +
+  'aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 11.2v5"/><circle cx="12" cy="7.9" r=".6" ' +
+  'fill="currentColor" stroke-width="1.4"/></svg>';
+function infoKnopf(id, key, label){
+  if(!kpiInfo(id, key)) return "";
+  return '<button type="button" class="kpi-i" data-info="' + esc(id + "|" + key) + '" aria-haspopup="dialog" ' +
+    'aria-expanded="false" aria-label="Was bedeutet ' + esc(label) + '?" title="Was bedeutet das?">' + INFO_ICON + '</button>';
+}
+
+/* Das Fenster liegt am <body> (wie der Export-Dialog), damit es weder
+   vom abgerundeten Dashboard noch von einer schwebenden Kachel
+   abgeschnitten wird. Es gibt immer nur eines. */
+const infoFenster = (function(){
+  let el = null, knopf = null;
+
+  function bauen(){
+    el = document.createElement("div");
+    el.id = "bmk-info";
+    el.setAttribute("role", "dialog");
+    el.setAttribute("aria-labelledby", "bmk-info-titel");
+    el.hidden = true;
+    document.body.appendChild(el);
+    el.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(e.target.closest(".i-zu")) schliessen(true);
+    });
+  }
+
+  function inhalt(id, key){
+    const k = KANAELE[id], info = kpiInfo(id, key);
+    const def = k.kpis.find(function(d){ return d.key === key; }) || {label:key};
+    const cur = k.daten()[state[k.monatFeld]];
+    const aktuell = (info.aktuell && cur) ? info.aktuell(cur) : "";
+    const q = info.quelle || {};
+    return '<div class="i-kopf"><span class="i-kanal">' + esc(kurzName(id)) + ' · ' + esc(q.name || "") + '</span>' +
+        '<button type="button" class="i-zu" aria-label="Erklärung schließen">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>' +
+        '</button></div>' +
+      '<h3 id="bmk-info-titel">' + esc(def.label) + '</h3>' +
+      (info.text ? '<p class="i-text">' + esc(info.text) + '</p>' : '') +
+      (info.zitat ? '<blockquote class="i-zitat">„' + esc(info.zitat) + '“</blockquote>' : '') +
+      (aktuell ? '<p class="i-aktuell">' + esc(aktuell) + '</p>' : '') +
+      (info.hinweis ? '<p class="i-hinweis"><b>Gut zu wissen:</b> ' + esc(info.hinweis) + '</p>' : '') +
+      '<p class="i-quelle">Quelle: ' + esc(q.name || "—") + (q.art ? ' · ' + esc(q.art) : '') +
+        (q.url ? ' · <a href="' + esc(q.url) + '" target="_blank" rel="noopener">zur Quelle ↗</a>' : '') + '</p>';
+  }
+
+  function setzen(){
+    if(!el || el.hidden || !knopf) return;
+    const r = knopf.getBoundingClientRect();
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const breite = Math.min(360, vw - 24);
+    el.style.width = breite + "px";
+    const hoch = el.offsetHeight;
+    let left = r.right + 8 - breite;
+    left = Math.max(12, Math.min(left, vw - breite - 12));
+    let top = r.bottom + 10, oben = false;
+    if(top + hoch > vh - 12 && r.top - hoch - 10 > 12){ top = r.top - hoch - 10; oben = true; }
+    top = Math.max(12, Math.min(top, vh - hoch - 12));
+    el.style.left = left + "px";
+    el.style.top = top + "px";
+    el.classList.toggle("oben", oben);
+    el.style.setProperty("--pfeil", Math.max(18, Math.min(breite - 18, r.left + r.width / 2 - left)) + "px");
+  }
+
+  function oeffnen(btn){
+    if(!el) bauen();
+    const teile = String(btn.dataset.info || "").split("|");
+    if(!KANAELE[teile[0]] || !kpiInfo(teile[0], teile[1])) return;
+    if(knopf === btn && !el.hidden){ schliessen(true); return; }
+    schliessen(false);
+    knopf = btn;
+    el.innerHTML = inhalt(teile[0], teile[1]);
+    el.hidden = false;
+    el.classList.remove("rein");
+    setzen();
+    void el.offsetWidth;
+    el.classList.add("rein");
+    btn.setAttribute("aria-expanded", "true");
+    btn.classList.add("offen");
+    const zu = el.querySelector(".i-zu");
+    if(zu) zu.focus({preventScroll:true});
+  }
+
+  function schliessen(fokusZurueck){
+    if(!el || el.hidden) return;
+    el.hidden = true;
+    if(knopf){
+      knopf.setAttribute("aria-expanded", "false");
+      knopf.classList.remove("offen");
+      if(fokusZurueck && document.contains(knopf)) knopf.focus({preventScroll:true});
+    }
+    knopf = null;
+  }
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest(".kpi-i");
+    if(btn){ e.preventDefault(); e.stopPropagation(); oeffnen(btn); return; }
+    if(el && !el.hidden && !el.contains(e.target)) schliessen(false);
+  });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") schliessen(true); });
+  window.addEventListener("resize", function(){ schliessen(false); });
+  /* Beim Scrollen im Inhaltsbereich wandert das Fenster mit seiner Kachel mit. */
+  document.addEventListener("scroll", function(){ setzen(); }, true);
+
+  return {schliessen: function(){ schliessen(false); }};
+})();
 
 /* ============================================================
    6. KANAL bus-und-bahn.de
@@ -1932,12 +2432,23 @@ function renderWebsite(){
     })
   });
 
+  /* Matomo liefert Herkunft, Geräte, Suchmaschinen, Verweise und
+     Kampagnen nur je Besuch. Mit WEB_NUR_BESUCHER stehen dort statt
+     Besuchszahlen Anteile am gesamten Website-Traffic. */
+  const traffic = cur.kpi.visits > 0 ? cur.kpi.visits : null;
+  const menge = function(v, summe){
+    if(!WEB_NUR_BESUCHER) return fmt(v);
+    const basis = traffic || summe;
+    return basis > 0 ? pct(v / basis * 100) : "—";
+  };
+  const mengeKopf = WEB_NUR_BESUCHER ? "Anteil" : "Besuche";
+
   /* --- Herkunft und Geräte --- */
   const chEntries = Object.entries(cur.channels || {});
   const channelsHTML = verteilung({
-    klasse:"split first", titel:"Herkunft der Besuche",
-    note: fmt(chEntries.reduce((a,e)=>a+e[1],0)) + " Besuche",
-    eintraege: chEntries, farben: CH_COLORS,
+    klasse:"split first", titel: WEB_NUR_BESUCHER ? "Herkunft" : "Herkunft der Besuche",
+    note: WEB_NUR_BESUCHER ? "Anteile nach Kanaltyp" : fmt(chEntries.reduce((a,e)=>a+e[1],0)) + " Besuche",
+    eintraege: chEntries, farben: CH_COLORS, nurAnteil: WEB_NUR_BESUCHER,
     leerText:"Dieser Monatsbericht enthält keine Aufschlüsselung nach Kanälen."
   });
 
@@ -1947,11 +2458,14 @@ function renderWebsite(){
   /* Der Vergleichssatz steht nur, wenn beide Gerätetypen im Bericht auftauchen. */
   const devHint = (dd.Desktop && dd.Smartphone)
     ? 'Desktop liefert ' + dec1(dd.Desktop.apv) + ' Aktionen pro Besuch gegenüber ' +
-      dec1(dd.Smartphone.apv) + ' auf dem Smartphone — bei nur ' + anteil(dd.Desktop.visits, devTotal) + ' % der Besuche.'
-    : 'Anteile der Gerätetypen an allen Besuchen des Monats.';
+      dec1(dd.Smartphone.apv) + ' auf dem Smartphone — bei nur ' + anteil(dd.Desktop.visits, devTotal) +
+      (WEB_NUR_BESUCHER ? ' % des Website-Traffics.' : ' % der Besuche.')
+    : (WEB_NUR_BESUCHER ? 'Anteile der Gerätetypen am Website-Traffic des Monats.'
+                        : 'Anteile der Gerätetypen an allen Besuchen des Monats.');
   const devicesHTML = verteilung({
-    klasse:"split", titel:"Gerätetypen", note: fmt(devTotal) + " Besuche",
-    eintraege: devEntries, farben: DEV_COLORS, hinweis: devHint,
+    klasse:"split", titel:"Gerätetypen",
+    note: WEB_NUR_BESUCHER ? "Anteile" : fmt(devTotal) + " Besuche",
+    eintraege: devEntries, farben: DEV_COLORS, hinweis: devHint, nurAnteil: WEB_NUR_BESUCHER,
     leerText:"Dieser Monatsbericht enthält keine Aufschlüsselung nach Gerätetypen."
   });
 
@@ -1969,19 +2483,20 @@ function renderWebsite(){
       '<div class="val" data-count="' + ai.total + '" data-kind="num">' + fmt(ai.total) + '</div>' +
       deltaHTML("ai", ai.total, aiBefore, cmpLabel) +
       '<div class="srcs">' + (aiSources || '<div>Keine Quellen im Bericht<b>—</b></div>') + '</div>' +
-      '<p class="foot">' + aiShare + ' % aller Besuche.' +
+      '<p class="foot">' + aiShare + (WEB_NUR_BESUCHER ? ' % des gesamten Website-Traffics.' : ' % aller Besuche.') +
       (aiTop ? ' ' + esc(aiTop) + ' ist die stärkste dieser Quellen.' : '') + '</p>' +
     '</div>';
 
   /* --- Detailtabellen --- */
   const engines = cur.engines || [];
   const engMax = maxOf(engines.map(e=>e[1]));
+  const engSumme = engines.reduce((a,e)=>a+e[1],0);
   const engRows = engines.map(e=>
     '<tr>' +
       '<td><div class="cell-name"><span class="favchip">' + esc(chipText(e[0])) + '</span>' +
       '<span class="tname" title="' + esc(e[0]) + '">' + esc(e[0]) + '</span></div></td>' +
       '<td><div class="cell-num"><span class="minibar"><span data-w="' + (e[1]/engMax*100) + '"></span></span>' +
-      '<b>' + fmt(e[1]) + '</b></div></td>' +
+      '<b>' + menge(e[1], engSumme) + '</b></div></td>' +
       '<td><span class="' + bounceClass(e[2]) + '">' + e[2] + ' %</span></td>' +
     '</tr>').join("");
 
@@ -1991,20 +2506,22 @@ function renderWebsite(){
     : '<div class="card detail-card">' +
       '<div class="card-head"><h2>Suchmaschinen im Detail</h2>' +
       '<span class="card-note">' + engines.length + ' Quellen</span></div>' +
-      '<div class="tablewrap"><table><thead><tr><th>Suchmaschine</th><th>Besuche</th><th>Absprung</th></tr></thead>' +
+      '<div class="tablewrap"><table><thead><tr><th>Suchmaschine</th><th>' + mengeKopf + '</th><th>Absprung</th></tr></thead>' +
       '<tbody>' + engRows + '</tbody></table></div>' +
-      '<p class="tfoot-note">Grün = unterdurchschnittliche Absprungrate, Rot = über 60 %.</p>' +
+      '<p class="tfoot-note">Grün = unterdurchschnittliche Absprungrate, Rot = über 60 %.' +
+      (WEB_NUR_BESUCHER ? ' Anteil = am gesamten Website-Traffic des Monats.' : '') + '</p>' +
     '</div>';
 
   const referrers = cur.referrers || [];
   const refMax = maxOf(referrers.map(r=>r[1]));
+  const refSumme = referrers.reduce((a,r)=>a+r[1],0);
   const refRows = referrers.map((r,i)=>
     '<tr>' +
       '<td><div class="cell-name"><span class="rankno">' + (i+1) + '</span>' +
       '<span class="favchip">' + esc(chipText(r[0])) + '</span>' +
       '<span class="tname" title="' + esc(r[0]) + '">' + esc(r[0]) + '</span></div></td>' +
       '<td><div class="cell-num"><span class="minibar"><span data-w="' + (r[1]/refMax*100) + '"></span></span>' +
-      '<b>' + fmt(r[1]) + '</b></div></td>' +
+      '<b>' + menge(r[1], refSumme) + '</b></div></td>' +
     '</tr>').join("");
 
   const referrerDetailHTML = !referrers.length
@@ -2013,19 +2530,21 @@ function renderWebsite(){
     : '<div class="card detail-card">' +
       '<div class="card-head"><h2>Verweisende Seiten im Detail</h2>' +
       '<span class="card-note">Top ' + referrers.length + '</span></div>' +
-      '<div class="tablewrap"><table><thead><tr><th>Quelle</th><th>Besuche</th></tr></thead>' +
+      '<div class="tablewrap"><table><thead><tr><th>Quelle</th><th>' + mengeKopf + '</th></tr></thead>' +
       '<tbody>' + refRows + '</tbody></table></div>' +
-      '<p class="tfoot-note">Balken zeigen den Abstand zur stärksten Quelle des Monats.</p>' +
+      '<p class="tfoot-note">Balken zeigen den Abstand zur stärksten Quelle des Monats.' +
+      (WEB_NUR_BESUCHER ? ' Anteil = am gesamten Website-Traffic.' : '') + '</p>' +
     '</div>';
 
   const camp = cur.campaigns || [];
   const campMax = maxOf(camp.map(c=>c[1]));
+  const campSumme = camp.reduce((a,c)=>a+c[1],0);
   const campRows = camp.map(c=>
     '<tr>' +
       '<td><div class="cell-name"><span class="favchip">' + esc(chipText(c[0])) + '</span>' +
       '<span class="tname" title="' + esc(c[0]) + '">' + esc(c[0]) + '</span></div></td>' +
       '<td><div class="cell-num"><span class="minibar"><span data-w="' + (c[1]/campMax*100) + '"></span></span>' +
-      '<b>' + fmt(c[1]) + '</b></div></td>' +
+      '<b>' + menge(c[1], campSumme) + '</b></div></td>' +
       '<td>' + fmt(c[2]) + '</td>' +
       '<td><span class="pill blue">' + (c[1] > 0 ? dec1(c[2]/c[1]) : "—") + '</span></td>' +
     '</tr>').join("");
@@ -2035,7 +2554,7 @@ function renderWebsite(){
         "Für diesen Monat sind keine Kampagnen im Bericht enthalten.")
     : '<div class="card detail-card">' +
       '<div class="card-head"><h2>Kampagnen im Detail</h2><span class="card-note">Top ' + camp.length + '</span></div>' +
-      '<div class="tablewrap"><table><thead><tr><th>Kampagne</th><th>Besuche</th><th>Aktionen</th><th>Akt./Besuch</th></tr></thead>' +
+      '<div class="tablewrap"><table><thead><tr><th>Kampagne</th><th>' + mengeKopf + '</th><th>Aktionen</th><th>Akt./Besuch</th></tr></thead>' +
       '<tbody>' + campRows + '</tbody></table></div>' +
       '<p class="tfoot-note">Aktionen pro Besuch zeigen, wie tief eine Kampagne ins Angebot führt.</p>' +
     '</div>';
@@ -2485,20 +3004,27 @@ function mmss(sekunden){
 function blattWeb(keys){
   const geraete = ["Smartphone","Desktop","Tablet","Sonstige"];
   const kanaele = ["Suchmaschinen","Direkte Zugriffe","Webseiten","Kampagnen","Soziale Netzwerke"];
-  const kopf = ["Monat","Eindeutige Besucher","Besuche","Seitenansichten","Eindeutige Seitenansichten",
-                "Aktionen","Aktionen pro Besuch","Ø Besuchszeit","Ø Besuchszeit (Sek.)","Absprungrate (%)",
-                "Downloads","Ausgehende Verweise","Interne Suchanfragen"]
+  /* Mit WEB_NUR_BESUCHER fehlt die Spalte „Besuche“, und die Herkunft
+     steht wie die Geräte als Anteil statt als Besuchszahl. */
+  const kopf = ["Monat","Eindeutige Besucher"]
+    .concat(WEB_NUR_BESUCHER ? [] : ["Besuche"])
+    .concat(["Seitenansichten","Eindeutige Seitenansichten",
+             "Aktionen","Aktionen pro Besuch","Ø Besuchszeit","Ø Besuchszeit (Sek.)","Absprungrate (%)",
+             "Downloads","Ausgehende Verweise","Interne Suchanfragen"])
     .concat(geraete.map(g => g + " (%)"))
-    .concat(kanaele.map(c => c + " (Besuche)"))
+    .concat(kanaele.map(c => c + (WEB_NUR_BESUCHER ? " (%)" : " (Besuche)")))
     .concat(["Verweise aus KI-Assistenten"])
     .concat(FOCUS_PAGES);
 
   const zeilen = keys.map(function(k){
     const d = DATA[k], kpi = d.kpi;
     const devSumme = Object.values(d.devices || {}).reduce((a,b)=>a+b, 0);
-    const zeile = [d.label, kpi.visitors, kpi.visits, kpi.pageviews, kpi.uniquePageviews,
-                   kpi.actions, kpi.actionsPerVisit, mmss(kpi.avgTime), kpi.avgTime, kpi.bounce,
-                   kpi.downloads, kpi.outlinks, kpi.searches];
+    const kanSumme = Object.values(d.channels || {}).reduce((a,b)=>a+b, 0);
+    const zeile = [d.label, kpi.visitors]
+      .concat(WEB_NUR_BESUCHER ? [] : [kpi.visits])
+      .concat([kpi.pageviews, kpi.uniquePageviews,
+               kpi.actions, kpi.actionsPerVisit, mmss(kpi.avgTime), kpi.avgTime, kpi.bounce,
+               kpi.downloads, kpi.outlinks, kpi.searches]);
     /* Geräte bewusst als Anteil: absolute Zahlen sind zwischen Monaten nicht vergleichbar. */
     geraete.forEach(function(g){
       const v = (d.devices || {})[g];
@@ -2506,7 +3032,8 @@ function blattWeb(keys){
     });
     kanaele.forEach(function(c){
       const v = (d.channels || {})[c];
-      zeile.push(v === undefined ? "" : v);
+      if(WEB_NUR_BESUCHER) zeile.push(v === undefined || !kanSumme ? "" : Math.round(v / kanSumme * 1000) / 10);
+      else                 zeile.push(v === undefined ? "" : v);
     });
     zeile.push(d.ai ? d.ai.total : "");
     FOCUS_PAGES.forEach(function(f){ zeile.push(fokusWert(k, f)); });
@@ -2518,13 +3045,22 @@ function blattWeb(keys){
 KANAELE.web = {
   titel: "bus-und-bahn.de",
   untertitel: "Websitekennzahlen aus Matomo",
-  leitKpis: ["visits","visitors","bounce"],
+  leitKpis: WEB_NUR_BESUCHER ? ["visitors","pageviews","bounce"] : ["visits","visitors","bounce"],
   monatFeld: "month",
   einheit: ["Bericht","Berichte"],
   fehltText: "Im Monatsbericht nicht enthalten",
   daten:   function(){ return DATA; },
   ordnung: function(){ return Object.keys(DATA).sort(); },
-  kpis: [
+  /* Oben die Mengen, unten das Verhalten. Ohne „Besuche“ rückt Downloads
+     nach — ebenfalls eine Kennzahl aus den Kernmetriken des Berichts. */
+  kpis: WEB_NUR_BESUCHER ? [
+    {key:"visitors",  label:"Eindeutige Besucher", kind:"num"},
+    {key:"pageviews", label:"Seitenansichten",     kind:"num"},
+    {key:"downloads", label:"Downloads",           kind:"num"},
+    {key:"avgTime",   label:"Ø Besuchszeit",       kind:"dur"},
+    {key:"bounce",    label:"Absprungrate",        kind:"pct"},
+    {key:"searches",  label:"Interne Suchanfragen",kind:"num"}
+  ] : [
     {key:"visitors",  label:"Eindeutige Besucher", kind:"num"},
     {key:"visits",    label:"Besuche",             kind:"num"},
     {key:"pageviews", label:"Seitenansichten",     kind:"num"},
@@ -2534,7 +3070,9 @@ KANAELE.web = {
   ],
   chart: {
     feld: "chartMetric",
-    metriken: {visits:"Besuche", pageviews:"Seitenansichten", visitors:"Eindeutige Besucher"},
+    metriken: WEB_NUR_BESUCHER
+      ? {visitors:"Eindeutige Besucher", pageviews:"Seitenansichten", downloads:"Downloads"}
+      : {visits:"Besuche", pageviews:"Seitenansichten", visitors:"Eindeutige Besucher"},
     hinweis: function(label){
       return "Gefüllte Balken = Monate mit hinterlegten Daten (" + label + "). " +
              "Schraffierte Monate warten noch auf ihren Bericht.";
@@ -2676,6 +3214,71 @@ function appPlattformen(cur, cmp, cmpLabel){
   });
 }
 
+/* Warum viele Neuinstallationen die aktiven Nutzer kaum erhöhen — mit den
+   Zahlen der zwölf Monate bis zum gewählten Monat. Die Begründung folgt
+   den Definitionen hinter dem (i) von „Aktive Nutzer" und
+   „Neuinstallationen". */
+function appEinordnung(){
+  const monat = state.monthApp, titel = "Neuinstallationen einordnen";
+  const keys = [];
+  for(let n = 11; n >= 0; n--){ const k = monatMinus(monat, n); if(DATA_APP[k]) keys.push(k); }
+  const reihe = function(feld){
+    return keys.map(function(k){ return DATA_APP[k].kpi[feld]; }).filter(hatWert);
+  };
+  const summe = function(liste){ return liste.reduce(function(a,b){ return a + b; }, 0); };
+  const inst = reihe("installs"), akt = reihe("activeUsers"), deinst = reihe("uninstalls");
+  if(!inst.length || !akt.length){
+    return leereKachel("split right", titel,
+      "Für diesen Zeitraum fehlen Neuinstallationen oder aktive Nutzer in der Excel-Datei.");
+  }
+  const cur = DATA_APP[monat].kpi;
+
+  /* Veränderung der aktiven Nutzer: zum Vorjahresmonat, sonst zum
+     ersten Monat im Zeitfenster. */
+  let aenderung = null, bezug = "";
+  const vj = DATA_APP[prevKey(monat, "year")];
+  if(vj && vj.kpi.activeUsers > 0 && hatWert(cur.activeUsers)){
+    aenderung = (cur.activeUsers - vj.kpi.activeUsers) / vj.kpi.activeUsers * 100;
+    bezug = "zum Vorjahresmonat";
+  }else if(keys.length > 1 && DATA_APP[keys[0]].kpi.activeUsers > 0 && hatWert(cur.activeUsers)){
+    aenderung = (cur.activeUsers - DATA_APP[keys[0]].kpi.activeUsers) / DATA_APP[keys[0]].kpi.activeUsers * 100;
+    bezug = "seit " + kurzMonat(keys[0]);
+  }
+  const rund = aenderung === null ? null : Math.round(aenderung * 10) / 10;
+  const klasse = rund === null || Math.abs(rund) < 0.05 ? "flat" : rund > 0 ? "up" : "down";
+
+  const zahl = function(wert, text, extra){
+    return '<div><b' + (extra ? ' class="' + extra + '"' : '') + '>' + wert + '</b><span>' + esc(text) + '</span></div>';
+  };
+  const jeHundert = (hatWert(cur.installs) && cur.activeUsers > 0)
+    ? Math.round(cur.installs / cur.activeUsers * 100) : null;
+
+  return '<div class="card split right einordnung">' +
+    '<div class="card-head"><h2>' + titel + '</h2><span class="card-note">' +
+      (keys.length > 1 ? kurzMonat(keys[0]) + " – " : "") + kurzMonat(keys[keys.length - 1]) + '</span></div>' +
+    '<div class="eo-zahlen">' +
+      zahl(fmt(summe(inst)), "Neuinstallationen (first_open)") +
+      zahl(fmt(summe(akt) / akt.length), "Ø aktive Nutzer je Monat") +
+      (rund === null ? zahl("—", "aktive Nutzer, kein Vergleichsmonat")
+                     : zahl((rund > 0 ? "+" : rund < 0 ? "−" : "±") + nf.format(Math.abs(rund)) + " %",
+                            "aktive Nutzer " + bezug, klasse)) +
+    '</div>' +
+    '<ul class="eo-liste">' +
+      '<li><b>Kein Bestand.</b> Aktive Nutzer zählt, wer die App im Monat genutzt hat – nicht, wer sie installiert hat. ' +
+        'Neue Nutzer tauchen in den Folgemonaten nur auf, wenn sie wiederkommen.</li>' +
+      '<li><b>Nicht nur neue Menschen.</b> first_open fällt auch an, wenn bestehende Nutzer das Gerät wechseln ' +
+        'oder die App neu installieren.</li>' +
+      '<li><b>Deinstallationen nur für Android.</b> ' +
+        (deinst.length ? fmt(summe(deinst)) + ' im selben Zeitraum; ' : '') +
+        'für iPhones erfasst Firebase keine – der Abgang ist also größer, als die Zahl zeigt.</li>' +
+    '</ul>' +
+    '<p class="hint">' + (jeHundert !== null
+      ? 'Im ' + esc(monatsName(monat)) + ' kamen auf 100 aktive Nutzer ' + jeHundert + ' Neuinstallationen. '
+      : '') +
+      'Ob neue Nutzer bleiben, zeigt der Bericht „Nutzerbindung“ in Firebase – diese Werte stehen nicht in der Excel.</p>' +
+  '</div>';
+}
+
 function renderApp(){
   const cur = DATA_APP[state.monthApp];
   const v = vergleich("app"), cmp = v.cmp, cmpLabel = v.label;
@@ -2705,6 +3308,7 @@ function renderApp(){
     auffaelligkeiten("app", cur, cmp, cmpLabel) +
     ranking +
     appPlattformen(cur, cmp, cmpLabel) +
+    appEinordnung() +
   '</div>';
 }
 
@@ -2818,7 +3422,6 @@ const NEWSLETTER_QUELLE = {
   ordner:      "/fileadmin/user_upload/17_kennzahlen/newsletter/",
   maxDateien:  60,       /* Sicherheitsnetz gegen versehentlich volle Ordner */
   probeMonate: 24,       /* so viele Monate rückwärts suchen, wenn kein Listing */
-  tageImDetail: 7,       /* so viele Zeilen zeigt die Tabelle „Tagesverlauf" */
   /* Falls der Server kein Verzeichnislisting erlaubt und die Dateien
      anders heißen als newsletter_<monat>_<jahr>.csv, können die Namen
      hier fest eingetragen werden. */
@@ -3023,30 +3626,192 @@ function monatAusDateiname(url){
   return null;
 }
 
+/* ---------- Zeitverlauf aus der CSV ----------
+   CleverReach legt unter dem Kopf einen Zeitverlauf der Öffnungen und
+   Klicks ab. Je nach Bericht steht dort eine Zeile pro Tag oder – bei der
+   24-Stunden-Auswertung – eine Zeile pro Stunde. Die alte Tabelle zeigte
+   einfach die ersten sieben Zeilen; bei Stundenwerten waren das sieben
+   Stunden desselben Tages. Deshalb werden die Zeilen jetzt gelesen,
+   erkannt (Tag, Uhrzeit) und zu Tagen, Tageszeiten und Wochentagen
+   zusammengefasst. */
+
+/* Wie nlSchluessel, zusätzlich ohne Umlaut-Zeichen: „Öffnungen" → „offnungen". */
+function nlNorm(s){
+  return nlSchluessel(s).normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+/* Abschnittsüberschriften erkennen */
+function nlAbschnitt(erst){
+  const n = String(erst || "").normalize("NFD").replace(/[̀-ͯ]/g, "");
+  if(/^(daily|hourly)overview$|^(tages|stunden)(ubersicht|verlauf)$|^24stunden|performance$|^zeitverlauf$/.test(n)) return "tage";
+  if(/^links?(overview)?$|^linkubersicht$|^linksubersicht$/.test(n)) return "links";
+  return null;
+}
+/* Spalten der Zeitreihe aus der Kopfzeile. Ohne erkennbaren Kopf gilt die
+   bekannte Reihenfolge Datum · Öffnungen unique · gesamt · Klicks unique · gesamt. */
+const NL_STANDARD = {datum:0, uOpen:1, tOpen:2, uClick:3, tClick:4};
+function nlSpalten(kopf){
+  const sp = Object.assign({}, NL_STANDARD);
+  let erkannt = 0;
+  kopf.forEach(function(zelle, i){
+    const n = nlNorm(zelle);
+    if(!n) return;
+    if(/^(date|datum|day|tag|zeitpunkt|period|zeitraum)/.test(n)){ sp.datum = i; erkannt++; }
+    else if(/^(time|uhrzeit|zeit|hour|stunde)/.test(n)){ sp.zeit = i; erkannt++; }
+    else if(/(unique|eindeutig).*(open|offn)|(open|offn).*(unique|eindeutig)/.test(n)){ sp.uOpen = i; erkannt++; }
+    else if(/(unique|eindeutig).*(click|klick)|(click|klick).*(unique|eindeutig)/.test(n)){ sp.uClick = i; erkannt++; }
+    else if(/(total|gesamt).*(open|offn)|(open|offn).*(total|gesamt)|^(opens|offnungen)$/.test(n)){ sp.tOpen = i; erkannt++; }
+    else if(/(total|gesamt).*(click|klick)|(click|klick).*(total|gesamt)|^(clicks|klicks)$/.test(n)){ sp.tClick = i; erkannt++; }
+  });
+  return erkannt ? sp : Object.assign({}, NL_STANDARD);
+}
+/* „05.08.2025 10:00" · „2025-08-05 10:00:00" · „08/05/2025 10:00 AM" ·
+   „05.08.2025" · „10:00" → {tag:"2025-08-05" oder null, stunde:10 oder null} */
+function nlZeitpunkt(wert){
+  const s = String(wert == null ? "" : wert).trim();
+  let tag = null, rest = s, m;
+  if((m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s))){
+    tag = [m[1], m[2], m[3]]; rest = s.slice(m[0].length);
+  }else if((m = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})/.exec(s))){
+    tag = [m[3].length === 2 ? "20" + m[3] : m[3], m[2], m[1]]; rest = s.slice(m[0].length);
+  }else if((m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/.exec(s))){       /* englisch: Monat zuerst */
+    tag = [m[3].length === 2 ? "20" + m[3] : m[3], m[1], m[2]]; rest = s.slice(m[0].length);
+  }
+  return {
+    tag: tag ? tag[0] + "-" + String(+tag[1]).padStart(2,"0") + "-" + String(+tag[2]).padStart(2,"0") : null,
+    stunde: nlStunde(rest)
+  };
+}
+function nlStunde(wert){
+  const s = String(wert == null ? "" : wert).trim();
+  const m = /(?:^|[\sT,])?(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?/i.exec(s) ||
+            /^(\d{1,2})(?:\s*(?:Uhr|h))?$/i.exec(s);
+  if(!m) return null;
+  let h = +m[1];
+  const suffix = (m[3] || "").toUpperCase();
+  if(suffix === "PM" && h < 12) h += 12;
+  if(suffix === "AM" && h === 12) h = 0;
+  return h >= 0 && h < 24 ? h : null;
+}
+function tagPlus(tag, n){
+  const d = new Date(tag + "T12:00:00");
+  d.setDate(d.getDate() + n);
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+/* Zeilen → Tagesverlauf, Tageszeit (0–23 Uhr) und Wochentage (Mo–So).
+   Gezählt werden die Unique-Öffnungen; Klicks laufen für die Tooltips mit. */
+function nlZeitverlauf(zeilen, versandDatum){
+  const versand = nlZeitpunkt(versandDatum);
+  /* Zeilen ohne Datum (nur Uhrzeit) hängen am Versandtag; springt die
+     Uhrzeit zurück, ist Mitternacht vorbei. */
+  let basis = versand.tag, letzte = -1;
+  zeilen.forEach(function(z){
+    if(z.tag){ basis = z.tag; letzte = z.stunde === null ? -1 : z.stunde; return; }
+    if(!basis) return;
+    if(z.stunde !== null && z.stunde < letzte) basis = tagPlus(basis, 1);
+    z.tag = basis;
+    if(z.stunde !== null) letzte = z.stunde;
+  });
+
+  const jeTag = {};
+  const stunden = new Array(24).fill(0), stundenKlicks = new Array(24).fill(0);
+  let mitStunde = 0;
+  zeilen.forEach(function(z){
+    const o = z.uOpen || 0, c = z.uClick || 0;
+    if(z.tag){
+      const t = jeTag[z.tag] || (jeTag[z.tag] = {tag:z.tag, uOpen:0, tOpen:0, uClick:0, tClick:0});
+      t.uOpen += o; t.tOpen += z.tOpen || 0; t.uClick += c; t.tClick += z.tClick || 0;
+    }
+    if(z.stunde !== null){ stunden[z.stunde] += o; stundenKlicks[z.stunde] += c; mitStunde++; }
+  });
+  const verlauf = Object.keys(jeTag).sort().map(function(k){ return jeTag[k]; });
+  /* Wochentage nur, wenn der Verlauf mindestens eine Woche umfasst —
+     sonst stünde fast alles auf dem Versandtag. */
+  let wochentage = null;
+  if(verlauf.length >= 7){
+    wochentage = new Array(7).fill(0);
+    verlauf.forEach(function(t){ wochentage[(new Date(t.tag + "T12:00:00").getDay() + 6) % 7] += t.uOpen; });
+  }
+  return {
+    verlauf: verlauf,
+    stunden: mitStunde ? stunden : null,
+    stundenKlicks: mitStunde ? stundenKlicks : null,
+    wochentage: wochentage,
+    versandTag: versand.tag,
+    versandStunde: versand.stunde
+  };
+}
+
+/* Themen eines Versands aus den geklickten Links: aus
+   „…/tickets/deutschlandticket" wird „Deutschlandticket". Abmelde-,
+   Profil- und CleverReach-Links sind kein Thema und fallen heraus. */
+const NL_KLEIN = ["im","in","und","der","die","das","den","dem","des","für","mit","von","vom","zu","zum","zur",
+                  "am","an","auf","bei","ab","aus","ohne","oder","nach","über","unter","im","ins"];
+const NL_SOCIAL = /(^|\.)(facebook|instagram|twitter|x|linkedin|youtube|tiktok|xing|threads|whatsapp)\.com$/;
+function nlThema(url){
+  let u;
+  try{ u = new URL(String(url || "").trim()); }catch(e){ return null; }
+  if(!/^https?:$/.test(u.protocol)) return null;
+  const host = u.hostname.replace(/^www\./, "");
+  if(/cleverreach|sendcockpit|crsend|unsubscribe|abmeld|newsletter-profil|profile/i.test(host + u.pathname)) return null;
+  if(NL_SOCIAL.test(host)) return "Social Media";
+  const teile = u.pathname.split("/").filter(Boolean)
+    .map(function(t){ try{ return decodeURIComponent(t); }catch(e){ return t; } })
+    .map(function(t){ return t.replace(/\.(html?|php|aspx?|pdf)$/i, ""); })
+    .filter(function(t){ return t && !/^\d+$/.test(t) && !/^(de|en|index|home|start|startseite)$/i.test(t); });
+  if(!teile.length) return "Startseite " + host;
+  return teile[teile.length - 1].replace(/[-_+]+/g, " ").replace(/\s+/g, " ").trim().split(" ")
+    .map(function(w, i){
+      const klein = w.toLowerCase();
+      if(i > 0 && NL_KLEIN.indexOf(klein) > -1) return klein;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(" ");
+}
+function nlThemen(links){
+  const summe = {}, reihenfolge = [];
+  let gesamt = 0;
+  (links || []).forEach(function(l){
+    const t = nlThema(l.url), k = l.klicks || 0;
+    if(!t || !(k > 0)) return;
+    if(summe[t] === undefined){ summe[t] = 0; reihenfolge.push(t); }
+    summe[t] += k; gesamt += k;
+  });
+  return reihenfolge.map(function(t){ return {thema:t, klicks:summe[t], anteil: gesamt ? summe[t] / gesamt * 100 : 0}; })
+    .sort(function(a,b){ return b.klicks - a.klicks; });
+}
+
 /* Liest eine CleverReach-CSV und liefert {key, wert} oder null.
-   Die Datei ist in Blöcke gegliedert (Kopf / "Daily Overview" /
-   "Links Overview"), getrennt durch Leerzeilen; wir laufen einmal
-   durch und tragen die Zeilen in den richtigen Topf. */
+   Die Datei ist in Blöcke gegliedert (Kopf / Zeitverlauf / Links),
+   getrennt durch Leerzeilen; wir laufen einmal durch und tragen die
+   Zeilen in den richtigen Topf. */
 function parseNewsletter(text, url){
   const roh = csvVorbereiten(text);
   const zeilen = csvZeilen(roh, csvTrenner(roh));
   const kopf = {}, tage = [], links = [];
-  let abschnitt = "kopf";
+  let abschnitt = "kopf", spalten = null;
 
   zeilen.forEach(function(r){
     if(!r.length || (r.length === 1 && !String(r[0]).trim())) return;
     const erst = nlSchluessel(r[0]);
-    if(erst === "dailyoverview" || erst === "tagesubersicht"){ abschnitt = "tage";  return; }
-    if(erst === "linksoverview" || erst === "links"){          abschnitt = "links"; return; }
+    const neu = nlAbschnitt(erst);
+    if(neu){ abschnitt = neu; spalten = null; return; }
 
     if(abschnitt === "kopf"){
       if(!erst) return;
       kopf[erst] = {wert: r[1], prozent: r[2]};
     }else if(abschnitt === "tage"){
-      /* Kopfzeile des Blocks überspringen — eine Datumszeile beginnt mit einer Ziffer. */
-      if(!/^\d/.test(String(r[0]).trim())) return;
-      tage.push({datum:r[0], uOpen:csvZahl(r[1]), tOpen:csvZahl(r[2]),
-                 uClick:csvZahl(r[3]), tClick:csvZahl(r[4])});
+      const z = r.map(function(c){ return String(c == null ? "" : c).trim(); });
+      if(!spalten){
+        /* Erste Zeile des Blocks: Kopfzeile, sofern sie nicht mit einer Ziffer beginnt. */
+        if(!/^\d/.test(z[0])){ spalten = nlSpalten(z); return; }
+        spalten = Object.assign({}, NL_STANDARD);
+      }
+      const dz = z[spalten.datum] || "";
+      if(!/^\d/.test(dz)) return;                   /* Summen- und Zwischenzeilen */
+      const zp = nlZeitpunkt(dz);
+      if(zp.stunde === null && spalten.zeit !== undefined) zp.stunde = nlStunde(z[spalten.zeit]);
+      tage.push({tag:zp.tag, stunde:zp.stunde,
+                 uOpen:csvZahl(z[spalten.uOpen]), tOpen:csvZahl(z[spalten.tOpen]),
+                 uClick:csvZahl(z[spalten.uClick]), tClick:csvZahl(z[spalten.tClick])});
     }else if(abschnitt === "links"){
       if(erst === "pos" || erst === "position" || erst === "url") return;
       if(!String(r[1] || "").trim()) return;
@@ -3081,6 +3846,7 @@ function parseNewsletter(text, url){
     ? Math.round(kpi.uniqueClicks / kpi.delivered * 1000) / 10
     : null;
 
+  const zv = nlZeitverlauf(tage, text_.date);
   return {key: key, wert: {
     label:   monatsName(key),
     name:    text_.name,
@@ -3088,37 +3854,164 @@ function parseNewsletter(text, url){
     date:    text_.date,
     sort:    csvDatumWert(text_.date),
     kpi:     kpi,
-    tage:    tage,
-    links:   links
+    verlauf: zv.verlauf,
+    stunden: zv.stunden,
+    stundenKlicks: zv.stundenKlicks,
+    wochentage: zv.wochentage,
+    versandTag: zv.versandTag,
+    versandStunde: zv.versandStunde,
+    links:   links,
+    themen:  nlThemen(links).slice(0, 6)
   }};
 }
 
-/* Kleine Info-Kachel: Name, Betreff, Versanddatum. Nutzt die Struktur
-   der App-Kachel „Plattformen" (.split.wide + .legend), damit keine
-   neuen Bauteile nötig sind. */
-function newsletterVersandkarte(cur){
-  const zeile = function(name, wert){
-    return '<div><span class="lname">' + esc(name) + '</span>' +
-           '<span class="lval">' + esc(wert || "—") + '</span></div>';
-  };
-  /* Die Prozentwerte von CleverReach haben unterschiedliche Bezugsgrößen.
-     Das gehört dazugeschrieben, sonst vergleicht man Äpfel mit Birnen. */
-  const k = cur.kpi;
-  const bezug = "Bezugsgrößen aus CleverReach: Bounce-Rate auf alle Empfänger, " +
-    "Öffnungs- und Abmelderate auf die zugestellten Mails, Klickrate auf die Öffner." +
-    (hatWert(k.clickRateDeliv)
-      ? " Auf die Zugestellten gerechnet liegt die Klickrate bei " + pct(k.clickRateDeliv) + "."
-      : "");
+/* „2026-07-07" → „Di, 07.07.2026" */
+function nlTagText(tag, mitWochentag){
+  if(!tag) return "";
+  return new Date(tag + "T12:00:00").toLocaleDateString("de-DE",
+    mitWochentag === false ? {day:"2-digit", month:"2-digit", year:"numeric"}
+                           : {weekday:"short", day:"2-digit", month:"2-digit", year:"numeric"});
+}
 
-  return '<div class="card split right">' +
+/* Kopf der Newsletter-Ansicht: Worum ging es in diesem Versand? Der
+   Betreff ist der übergeordnete Titel; die Themen ergeben sich aus den
+   Links, auf die tatsächlich geklickt wurde. */
+function newsletterThema(cur){
+  const titel = cur.subject || cur.name || ("Newsletter " + cur.label);
+  const wann = [];
+  if(cur.versandTag) wann.push("Versand am " + nlTagText(cur.versandTag));
+  else if(cur.date) wann.push("Versand am " + cur.date);
+  if(cur.versandStunde !== null && cur.versandStunde !== undefined) wann.push(String(cur.versandStunde).padStart(2,"0") + " Uhr");
+  if(cur.name && cur.subject) wann.push("Mailing „" + cur.name + "“");
+  const themen = (cur.themen || []).slice(0, 5);
+  const chips = themen.map(function(t){
+    return '<span class="nl-chip" title="' + esc(fmt(t.klicks)) + ' Klicks">' + esc(t.thema) +
+           '<b>' + esc(pct(t.anteil)) + '</b></span>';
+  }).join("");
+  return '<div class="card nl-thema bmk-full">' +
+    '<span class="nl-icon" aria-hidden="true">' + iconSvg("news") + '</span>' +
+    '<div class="nl-inhalt">' +
+      '<span class="nl-kicker">' + esc(wann.join(" · ") || cur.label) + '</span>' +
+      '<p class="nl-betreff">' + esc(titel) + '</p>' +
+      (chips
+        ? '<div class="nl-themen"><span class="nl-label">Meistgeklickte Themen</span>' + chips + '</div>'
+        : '<div class="nl-themen"><span class="nl-label">Für diesen Versand sind keine Link-Klicks im Bericht enthalten.</span></div>') +
+    '</div>' +
+  '</div>';
+}
+
+/* Versand als Trichter: Empfänger → zugestellt → geöffnet → geklickt.
+   Neben jeder Stufe steht der Anteil an der Stufe davor — genau so
+   rechnet CleverReach seine Raten, damit sind die Bezugsgrößen auf
+   einen Blick klar. */
+function newsletterVersandkarte(cur){
+  const k = cur.kpi;
+  const stufen = [
+    {name:"Empfänger",  wert:k.recipients,   text:"Empfänger gesamt"},
+    {name:"Zugestellt", wert:k.delivered,    text: hatWert(k.delivered) && k.recipients > 0 ? pct(k.delivered / k.recipients * 100) + " der Empfänger" : ""},
+    {name:"Geöffnet",   wert:k.uniqueOpens,  text: hatWert(k.openRate) ? pct(k.openRate) + " der Zugestellten" : ""},
+    {name:"Geklickt",   wert:k.uniqueClicks, text: hatWert(k.clickRate) ? pct(k.clickRate) + " der Öffner" : ""}
+  ].filter(function(st){ return hatWert(st.wert); });
+  const basis = maxOf(stufen.map(function(st){ return st.wert; }));
+  const trichter = stufen.map(function(st, i){
+    return '<div class="tr-stufe s' + i + '">' +
+      '<span class="tr-name">' + esc(st.name) + '</span>' +
+      '<span class="tr-bahn"><span data-w="' + Math.max(1.5, st.wert / basis * 100) + '"></span></span>' +
+      '<span class="tr-wert"><b>' + fmt(st.wert) + '</b><em>' + esc(st.text) + '</em></span>' +
+    '</div>';
+  }).join("");
+  const zeile = function(name, wert){
+    return '<div><span class="lname">' + esc(name) + '</span><span class="lval">' + esc(wert || "—") + '</span></div>';
+  };
+  return '<div class="card split right nl-versand">' +
     '<div class="card-head"><h2>Versand</h2><span class="card-note">Angaben aus CleverReach</span></div>' +
-    '<div class="legend">' +
-      zeile("Name",         cur.name) +
-      zeile("Betreff",      cur.subject) +
+    (trichter ? '<div class="trichter">' + trichter + '</div>' : '') +
+    '<div class="legend nl-meta">' +
+      zeile("Mailing", cur.name) +
       zeile("Versanddatum", cur.date) +
     '</div>' +
-    '<p class="hint">' + esc(bezug) + '</p>' +
-    '</div>';
+    '<p class="hint">Jede Stufe bezieht sich auf die davor: Öffnungsrate auf die zugestellten Mails, Klickrate auf die Öffner' +
+      (hatWert(k.clickRateDeliv) ? ' – auf alle Zugestellten gerechnet sind es ' + pct(k.clickRateDeliv) : '') +
+      '. Die Bounce-Rate bezieht CleverReach auf alle Empfänger.</p>' +
+  '</div>';
+}
+
+/* Zeitverlauf nach dem Versand: je Tag, je Stunde, je Wochentag — so weit
+   der Bericht es hergibt. Aufbau wie beim Liniennetzplan: der Verlauf über
+   die volle Breite, darunter Tageszeit und Wochentage nebeneinander. */
+function newsletterZeitverlauf(cur){
+  const verlauf = cur.verlauf || [];
+  const stunden = cur.stunden;
+  const summeStunden = stunden ? stunden.reduce(function(a,b){ return a + b; }, 0) : 0;
+  const hatVerlauf = verlauf.length >= 3;
+  const hatStunden = !!stunden && summeStunden > 0;
+  const hatWochen  = !!cur.wochentage;
+  const out = [];
+
+  if(hatVerlauf){
+    const spitze = verlauf.reduce(function(a,t){ return t.uOpen > a.uOpen ? t : a; }, verlauf[0]);
+    const summe = verlauf.reduce(function(a,t){ return a + t.uOpen; }, 0);
+    const ersteZwei = verlauf.slice(0, 2).reduce(function(a,t){ return a + t.uOpen; }, 0);
+    out.push(balkenReihe({
+      klasse:"full", titel:"Öffnungen im Monatsverlauf", note: verlauf.length + " Tage ab Versand",
+      einheit:"Öffnungen",
+      punkte: verlauf.map(function(t){
+        return {label: String(+t.tag.slice(8,10)), wert: t.uOpen, aktiv: t.tag === cur.versandTag,
+                tipp: nlTagText(t.tag), zusatz: fmt(t.uClick) + " Klicks"};
+      }),
+      hinweis: "Unique-Öffnungen je Tag laut CleverReach-Bericht, blau beschriftet der Versandtag. Stärkster Tag: " +
+               nlTagText(spitze.tag) + " mit " + fmt(spitze.uOpen) + " Öffnungen" +
+               (summe > 0 ? " – die ersten beiden Tage bringen " + pct(ersteZwei / summe * 100) + " aller Öffnungen." : ".")
+    }));
+  }
+
+  /* Tageszeit und Wochentage teilen sich eine Zeile; steht nur eins von
+     beiden im Bericht, nimmt es die volle Breite. */
+  const paar = hatStunden && hatWochen;
+  if(hatStunden){
+    const spitzeH = stunden.indexOf(Math.max.apply(null, stunden));
+    out.push(balkenReihe({
+      klasse: paar ? "" : "full", titel:"Tageszeit", note:"Unique-Öffnungen je Stunde",
+      einheit:"Öffnungen",
+      punkte: stunden.map(function(v, h){
+        return {label: String(h).padStart(2,"0"), wert: v, aktiv: h === cur.versandStunde,
+                tipp: String(h).padStart(2,"0") + ":00–" + String(h).padStart(2,"0") + ":59 Uhr",
+                zusatz: fmt((cur.stundenKlicks || [])[h] || 0) + " Klicks"};
+      }),
+      hinweis: "Stärkste Stunde: " + String(spitzeH).padStart(2,"0") + " Uhr mit " +
+               pct(stunden[spitzeH] / summeStunden * 100) + " der Öffnungen" +
+               (hatWert(cur.versandStunde) ? ", blau beschriftet die Versandstunde" : "") + "."
+    }));
+  }
+  if(hatWochen){
+    const summeW = cur.wochentage.reduce(function(a,b){ return a + b; }, 0);
+    const versandWt = cur.versandTag ? (new Date(cur.versandTag + "T12:00:00").getDay() + 6) % 7 : -1;
+    out.push(balkenReihe({
+      klasse: paar ? "rechts" : "full", titel:"Wochentage", note:"Unique-Öffnungen je Wochentag",
+      einheit:"Öffnungen",
+      punkte: cur.wochentage.map(function(v, i){
+        return {label: WOCHENTAGE[i], wert: v, aktiv: i === versandWt, tipp: WOCHENTAGE[i]};
+      }),
+      hinweis: "Summe über den ganzen Verlauf" + (versandWt > -1 ? ", blau beschriftet der Versandtag" : "") + "." +
+               (summeW > 0 ? " Samstag und Sonntag zusammen: " + pct((cur.wochentage[5] + cur.wochentage[6]) / summeW * 100) + "." : "")
+    }));
+  }
+
+  if(!out.length){
+    return leereKachel("chart full", "Zeitverlauf",
+      "Dieser Versandbericht enthält keinen auswertbaren Zeitverlauf der Öffnungen.");
+  }
+  /* Was der Bericht nicht hergibt, wird benannt statt stillschweigend weggelassen. */
+  let fehlt = "";
+  if(!hatVerlauf && hatStunden){
+    fehlt = "Dieser Bericht enthält nur die ersten 24 Stunden nach dem Versand. Einen Verlauf über mehrere Tage " +
+            "und die Wochentage zeigt das Dashboard, sobald CleverReach Tageswerte mitliefert.";
+  }else if(hatVerlauf && !hatStunden){
+    fehlt = "Dieser Bericht enthält Tageswerte ohne Uhrzeit – eine Auswertung nach Tageszeit ist deshalb nicht möglich.";
+  }else if(hatVerlauf && !hatWochen){
+    fehlt = "Für die Wochentage reicht der Verlauf nicht aus (weniger als sieben Tage).";
+  }
+  return out.join("") + (fehlt ? '<p class="nl-fehlt bmk-full">' + esc(fehlt) + '</p>' : '');
 }
 
 function renderNewsletter(){
@@ -3146,47 +4039,19 @@ function renderNewsletter(){
     })
   });
 
-  /* Tagesverlauf: eine Zeile pro Tag nach dem Versand. CleverReach
-     liefert rund 30 Tage; die ersten Tage tragen die Bewegung, der Rest
-     steht im Bericht selbst. */
-  const alleTage = cur.tage || [];
-  const tage = alleTage.slice(0, NEWSLETTER_QUELLE.tageImDetail);
-  const tagesverlauf = tage.length
-    ? '<div class="card detail-card full">' +
-      '<div class="card-head"><h2>Tagesverlauf</h2><span class="card-note">' +
-      (alleTage.length > tage.length
-        ? "erste " + tage.length + " von " + alleTage.length + " Tagen"
-        : tage.length + (tage.length === 1 ? " Tag" : " Tage") + " nach dem Versand") + '</span></div>' +
-      '<div class="tablewrap"><table><thead><tr>' +
-        '<th>Datum</th><th>Öffnungen (Unique)</th><th>Öffnungen (gesamt)</th>' +
-        '<th>Klicks (Unique)</th><th>Klicks (gesamt)</th>' +
-      '</tr></thead><tbody>' +
-      tage.map(function(t){
-        return '<tr>' +
-          '<td>' + esc(t.datum) + '</td>' +
-          '<td><div class="cell-num"><b>' + fmt(t.uOpen  || 0) + '</b></div></td>' +
-          '<td><div class="cell-num"><b>' + fmt(t.tOpen  || 0) + '</b></div></td>' +
-          '<td><div class="cell-num"><b>' + fmt(t.uClick || 0) + '</b></div></td>' +
-          '<td><div class="cell-num"><b>' + fmt(t.tClick || 0) + '</b></div></td>' +
-        '</tr>';
-      }).join("") + '</tbody></table></div>' +
-      '<p class="tfoot-note">Die Zeilen stammen unverändert aus dem CleverReach-Bericht' +
-      (alleTage.length > tage.length ? ", der noch " + (alleTage.length - tage.length) +
-        " weitere Tage mit auslaufenden Werten enthält" : "") + '.</p></div>'
-    : leereKachel("detail-card full", "Tagesverlauf",
-        "Dieser Versandbericht enthält keinen Tagesverlauf.");
-
-  /* Reihenfolge bestimmt die Rasterplatzierung: oben KPI-Kacheln und
-     Linkliste nebeneinander, darunter Jahresverlauf und Versandangaben,
-     ganz unten der Tagesverlauf über die volle Breite. */
-  return '<div class="grid">' +
-    kpiRaster("news", cur, cmp, cmpLabel) +
-    ranking +
-    jahresChart("news") +
-    auffaelligkeiten("news", cur, cmp, cmpLabel) +
-    newsletterVersandkarte(cur) +
-    tagesverlauf +
-  '</div>';
+  /* Oben das Thema des Versands in eigener Zeile (die Linkliste sitzt fest
+     in der ersten Rasterzeile des Hauptrasters). Darunter KPI-Kacheln und
+     Links, dann Jahresverlauf und Versand nebeneinander, dann die
+     Auffälligkeiten und direkt darunter der Zeitverlauf. */
+  return '<div class="grid">' + newsletterThema(cur) + '</div>' +
+    '<div class="grid">' +
+      kpiRaster("news", cur, cmp, cmpLabel) +
+      ranking +
+      jahresChart("news") +
+      newsletterVersandkarte(cur) +
+      auffaelligkeiten("news", cur, cmp, cmpLabel) +
+      newsletterZeitverlauf(cur) +
+    '</div>';
 }
 
 /* Holt eine CSV — oder null, wenn es die Datei nicht gibt. TYPO3
@@ -3308,7 +4173,7 @@ function blattNewsletter(keys){
      aus dem CleverReach-Kopf. So landen auch die Kennzahlen im Export,
      die im Dashboard nicht als eigene Kachel auftauchen. */
   const felder = Object.keys(NEWSLETTER_FELDER);
-  const kopf = ["Monat","Name","Betreff","Versanddatum"].concat(
+  const kopf = ["Monat","Name","Betreff","Versanddatum","Meistgeklickte Themen"].concat(
     felder.map(function(f){
       const n = NEWSLETTER_FELDER[f];
       return n.exportLabel || (n.label + (n.art === "pct" ? " (%)" : ""));
@@ -3317,7 +4182,8 @@ function blattNewsletter(keys){
   const zeilen = keys.map(function(k){
     const d = DATA_NEWSLETTER[k];
     const leer = function(v){ return hatWert(v) ? v : ""; };
-    return [d.label, d.name || "", d.subject || "", d.date || ""]
+    const themen = (d.themen || []).slice(0, 3).map(function(t){ return t.thema; }).join(", ");
+    return [d.label, d.name || "", d.subject || "", d.date || "", themen]
       .concat(felder.map(function(f){ return leer(d.kpi[f]); }));
   });
   return [kopf].concat(zeilen);
@@ -3803,10 +4669,16 @@ KANAELE.netz = {
 };
 
 /* ============================================================
-   10. KANAL Bus-WLAN
+   10. KANÄLE Bus-WLAN und WLAN-City
    Quelle: Monatsberichte des Fahrgast-WLAN (PDF) im fileadmin.
    Ablageordner: fileadmin/user_upload/17_kennzahlen/bus-wlan/
+                 fileadmin/user_upload/17_kennzahlen/wlan-city/
    Dateiname:    2025-08_fahrgastwlan_bericht_mit_nutzungsstatistiken.pdf
+
+   Beide Berichte sind gleich aufgebaut. Deshalb gibt es die Logik nur
+   einmal (wlanKanal unten); jeder Kanal bringt nur seinen Ordner, seine
+   Texte und seine Felder im Zustand mit. Ein weiteres WLAN-Angebot
+   braucht nur einen weiteren wlanKanal({…})-Aufruf.
 
    Besonderheit: Der Bericht besteht fast nur aus Grafiken. Zahlen
    stehen im Fließtext über den Grafiken und in zwei Tabellen. Alles,
@@ -3814,17 +4686,9 @@ KANAELE.netz = {
    durchschnittliche Sitzungsdauer — lässt sich aus dem PDF nicht
    auslesen und taucht deshalb hier nicht auf.
    ============================================================ */
-let DATA_WLAN = {};
+const WLAN_DATEN = {};                 /* Kanal-ID → {Monat → Auswertung} */
+const WLAN_ENDUNG = "_fahrgastwlan_bericht_mit_nutzungsstatistiken.pdf";
 
-const WLAN_QUELLE = {
-  ordner:      "/fileadmin/user_upload/17_kennzahlen/bus-wlan/",
-  endung:      "_fahrgastwlan_bericht_mit_nutzungsstatistiken.pdf",
-  maxBerichte: 30,
-  probeMonate: 24
-};
-function wlanDatei(jahr, mm){
-  return WLAN_QUELLE.ordner + encodeURIComponent(jahr + "-" + mm + WLAN_QUELLE.endung);
-}
 /* „2025-08_fahrgastwlan…pdf" → „2025-08" */
 function wlanMonatAusName(url){
   const m = /(\d{4})-(\d{2})_/.exec(decodeURIComponent(String(url || "")).split("/").pop());
@@ -3848,6 +4712,11 @@ function wlanTabelle(text){
   return out.sort(function(a,b){ return b[1] - a[1]; });
 }
 
+/* Eine Anzahl im Fließtext: „2.375" oder „150". Der Satzpunkt direkt
+   dahinter („beträgt 2.375.") gehört nicht zur Zahl — ein schlichtes
+   [\d.]* hätte ihn mitgenommen, und aus 2.375 wäre 2,375 geworden. */
+const WLAN_ZAHL = "(\\d{1,3}(?:\\.\\d{3})+|\\d+)";
+
 function parseWlanBericht(zeilen, url){
   const alles = zeilen.join(" ").replace(/\s+/g," ");
 
@@ -3866,12 +4735,13 @@ function parseWlanBericht(zeilen, url){
   if(!key) throw new Error("Zeitraum nicht erkannt");
 
   /* Kennzahlen aus den Erläuterungen über den Grafiken */
-  const gleich  = /gleichzeitig verbundener Geräte[^.]*?beträgt\s*(\d[\d.]*)/.exec(monatText);
-  const lizenz  = /Dies sind\s*([\d.,]+)\s*%\s*der installierten Lizenz\s*\(\s*(\d[\d.]*)/.exec(monatText);
-  const aktiv   = /Maximum aktiver Sitzungen[^.]*?beträgt\s*(\d[\d.]*)/.exec(monatText);
-  const geraete = /Geräte in dieser Zeit ist\s*(\d[\d.]*)\s*\(MAC[^)]*\)\s*et\s*(\d[\d.]*)/.exec(monatText);
+  const gleich  = new RegExp("gleichzeitig verbundener Geräte[^.]*?beträgt\\s*" + WLAN_ZAHL).exec(monatText);
+  const lizenz  = new RegExp("Dies sind\\s*([\\d.,]+)\\s*%\\s*der installierten Lizenz\\s*\\(\\s*" + WLAN_ZAHL).exec(monatText);
+  const aktiv   = new RegExp("Maximum aktiver Sitzungen[^.]*?beträgt\\s*" + WLAN_ZAHL).exec(monatText);
+  const geraete = new RegExp("Geräte in dieser Zeit ist\\s*" + WLAN_ZAHL + "\\s*\\(MAC[^)]*\\)\\s*et\\s*" + WLAN_ZAHL).exec(monatText);
 
-  /* Die beiden Tabellen: Sitzungen je Benutzerprofil und je Fahrzeug */
+  /* Die beiden Tabellen: Sitzungen je Benutzerprofil und je Eingangssubnetz
+     (im Bus-WLAN ist das ein Fahrzeug) */
   const pStart = monatText.indexOf("Sitzungen nach Profil");
   const sStart = monatText.indexOf("Sitzungen nach Eingangssubnetz");
   const profile = pStart > -1
@@ -3904,181 +4774,231 @@ function parseWlanBericht(zeilen, url){
   }};
 }
 
-function renderWlan(){
-  const cur = DATA_WLAN[state.monthWlan];
-  const v = vergleich("wlan"), cmp = v.cmp, cmpLabel = v.label;
+/* Bekannte Benutzerprofile. Erklärt wird nur, was im Bericht auch
+   vorkommt — ein anderes WLAN-Angebot kann andere Profile haben. */
+const WLAN_PROFILE = {
+  "1click":     "1click ist die Anmeldung ohne Konto",
+  "DSW-MOPADS": "DSW-MOPADS die dienstliche Nutzung"
+};
+function wlanProfilHinweis(profile){
+  const saetze = (profile || []).map(function(p){ return WLAN_PROFILE[p[0]]; }).filter(Boolean);
+  if(!saetze.length) return "Aufteilung aller Sitzungen des Monats nach Benutzerprofil.";
+  return saetze.join(", ") + ".";
+}
 
-  const profilHTML = verteilung({
-    klasse:"split wide", titel:"Sitzungen nach Benutzerprofil",
-    note: fmt(cur.kpi.sessions) + " Sitzungen",
-    eintraege: (cur.profile || []).map(function(p){ return [p[0], p[1]]; }),
-    farben: CH_COLORS, nachkomma: true,   /* „intern" liegt unter 1 % und wäre sonst 0 % */
-    hinweis:"1click ist die Anmeldung ohne Konto, DSW-MOPADS die dienstliche Nutzung.",
-    leerText:"Dieser Bericht enthält keine Aufteilung nach Profilen."
-  });
-
-  /* Jedes Fahrzeug meldet sich mit einem eigenen Eingangssubnetz. */
-  const top = (cur.fahrzeuge || []).slice(0,8);
-  const fzMax = maxOf(top.map(function(f){ return f[1]; }));
-  const fahrzeugHTML = rangKachel({
-    klasse:"rank", titel:"Meistgenutzte Fahrzeuge", note:"Sitzungen je Fahrzeug",
-    legende:"Jedes Fahrzeug meldet sich mit einem eigenen Netz. Der Bericht listet nur die " +
-            "stärksten davon auf, die Anteile beziehen sich auf alle Sitzungen des Monats.",
-    leerText:"Dieser Bericht enthält keine Aufteilung nach Fahrzeugen.",
-    zeilen: top.map(function(f){
-      return {name:f[0], text:fmt(f[1]), anteil:f[1] / fzMax * 100,
-              meta: hatWert(f[2]) ? pct(f[2]) + " der Sitzungen" : ""};
-    })
-  });
-
-  /* Reihenfolge bestimmt die Rasterplatzierung: oben KPI-Kacheln und
-     Jahresverlauf nebeneinander, darunter Profile und Fahrzeuge. */
-  return '<div class="grid">' +
-    kpiRaster("wlan", cur, cmp, cmpLabel) + jahresChart("wlan") +
-    auffaelligkeiten("wlan", cur, cmp, cmpLabel) +
-    profilHTML + fahrzeugHTML +
+/* Spitzenlast gegen die installierte Lizenz — als Messbalken unter den
+   Profilen. Die Füllung wird ab 80 % gelb, ab 95 % rot. */
+function wlanLizenzBalken(cur){
+  const kpi = cur.kpi || {};
+  if(!hatWert(kpi.maxConcurrent) || !hatWert(kpi.licensePct)) return "";
+  const w = Math.max(0, Math.min(100, kpi.licensePct));
+  const stufe = w >= 95 ? " kritisch" : w >= 80 ? " knapp" : "";
+  return '<div class="lizenz">' +
+    '<div class="lizenz-kopf"><span>Spitzenlast gegenüber der Lizenz</span><b>' + pct(kpi.licensePct) + '</b></div>' +
+    '<div class="lizenz-bahn' + stufe + '"><span data-w="' + w + '"></span></div>' +
+    '<p class="hint">Höchstens ' + fmt(kpi.maxConcurrent) + ' Geräte gleichzeitig' +
+      (hatWert(cur.lizenz) ? ' bei einer Lizenz für ' + fmt(cur.lizenz) + ' Nutzer' : '') + '.</p>' +
   '</div>';
 }
 
-function wlanHolen(melde){
-  const bilanz = {gelesen:0, fehler:0, fehlerNamen:[]};
-  const next = {};
+function wlanKanal(cfg){
+  const id = cfg.id;
+  WLAN_DATEN[id] = {};
+  const daten = function(){ return WLAN_DATEN[id]; };
+  const datei = function(jahr, mm){ return cfg.ordner + encodeURIComponent(jahr + "-" + mm + WLAN_ENDUNG); };
 
-  function dateiname(url){
-    try{ return decodeURIComponent(String(url).split("/").pop()); }catch(e){ return String(url); }
+  function zeichnen(){
+    const cur = daten()[state[cfg.monatFeld]];
+    const v = vergleich(id), cmp = v.cmp, cmpLabel = v.label;
+
+    const profilHTML = verteilung({
+      klasse:"split wide", titel:"Sitzungen nach Benutzerprofil",
+      note: fmt(cur.kpi.sessions) + " Sitzungen",
+      eintraege: (cur.profile || []).map(function(p){ return [p[0], p[1]]; }),
+      farben: CH_COLORS, nachkomma: true,   /* „intern" liegt unter 1 % und wäre sonst 0 % */
+      hinweis: wlanProfilHinweis(cur.profile),
+      nachsatz: wlanLizenzBalken(cur),
+      leerText:"Dieser Bericht enthält keine Aufteilung nach Profilen."
+    });
+
+    const top = (cur.fahrzeuge || []).slice(0,8);
+    const fzMax = maxOf(top.map(function(f){ return f[1]; }));
+    const rangHTML = rangKachel({
+      klasse:"rank", titel: cfg.rang.titel, note: cfg.rang.note, legende: cfg.rang.legende,
+      leerText: cfg.rang.leer,
+      zeilen: top.map(function(f){
+        return {name:f[0], text:fmt(f[1]), anteil:f[1] / fzMax * 100,
+                meta: hatWert(f[2]) ? pct(f[2]) + " der Sitzungen" : ""};
+      })
+    });
+
+    /* Reihenfolge bestimmt die Rasterplatzierung: oben KPI-Kacheln und
+       Jahresverlauf nebeneinander, darunter Profile und Rangliste. */
+    return '<div class="grid">' +
+      kpiRaster(id, cur, cmp, cmpLabel) + jahresChart(id) +
+      auffaelligkeiten(id, cur, cmp, cmpLabel) +
+      profilHTML + rangHTML +
+    '</div>';
   }
-  function uebernehmen(lib, puffer, url){
-    return pdfAuswerten(lib, puffer, function(zeilen){ return parseWlanBericht(zeilen, url); })
-      .then(function(r){
-        next[r.key] = r.monat;
-        bilanz.gelesen++;
-        melde(r.monat.label + " gelesen …");
-      }).catch(function(){
-        bilanz.fehler++;
-        if(bilanz.fehlerNamen.length < 4) bilanz.fehlerNamen.push(dateiname(url));
-      });
-  }
 
-  melde("Ordner wird durchsucht …");
-  return ladePdfJs().then(function(lib){
-    return ordnerListing(WLAN_QUELLE.ordner, "pdf").then(function(urls){
+  function holen(melde){
+    const bilanz = {gelesen:0, fehler:0, fehlerNamen:[]};
+    const next = {};
 
-      /* Weg A: Der Server listet den Ordner auf. */
-      if(urls.length){
+    function dateiname(url){
+      try{ return decodeURIComponent(String(url).split("/").pop()); }catch(e){ return String(url); }
+    }
+    function uebernehmen(lib, puffer, url){
+      return pdfAuswerten(lib, puffer, function(zeilen){ return parseWlanBericht(zeilen, url); })
+        .then(function(r){
+          next[r.key] = r.monat;
+          bilanz.gelesen++;
+          melde(r.monat.label + " gelesen …");
+        }).catch(function(){
+          bilanz.fehler++;
+          if(bilanz.fehlerNamen.length < 4) bilanz.fehlerNamen.push(dateiname(url));
+        });
+    }
+
+    melde("Ordner wird durchsucht …");
+    return ladePdfJs().then(function(lib){
+      return ordnerListing(cfg.ordner, "pdf").then(function(urls){
+
+        /* Weg A: Der Server listet den Ordner auf. */
+        if(urls.length){
+          let kette = Promise.resolve();
+          const genutzt = urls.slice(0, 30);
+          genutzt.forEach(function(url, i){
+            kette = kette.then(function(){
+              melde("Bericht " + (i+1) + " von " + genutzt.length + " wird gelesen …");
+              return holePdf(url).then(function(p){ return p ? uebernehmen(lib, p, url) : null; });
+            });
+          });
+          return kette;
+        }
+
+        /* Weg B: Kein Listing – der Dateiname steht fest. */
         let kette = Promise.resolve();
-        const genutzt = urls.slice(0, WLAN_QUELLE.maxBerichte);
-        genutzt.forEach(function(url, i){
+        letzteMonate(24).forEach(function(m){
           kette = kette.then(function(){
-            melde("Bericht " + (i+1) + " von " + genutzt.length + " wird gelesen …");
+            if(bilanz.gelesen >= 30) return;
+            melde("Suche " + m.monat + " " + m.jahr + " …");
+            const url = datei(m.jahr, m.mm);
             return holePdf(url).then(function(p){ return p ? uebernehmen(lib, p, url) : null; });
           });
         });
         return kette;
-      }
-
-      /* Weg B: Kein Listing – der Dateiname steht fest. */
-      let kette = Promise.resolve();
-      letzteMonate(WLAN_QUELLE.probeMonate).forEach(function(m){
-        kette = kette.then(function(){
-          if(bilanz.gelesen >= WLAN_QUELLE.maxBerichte) return;
-          melde("Suche " + m.monat + " " + m.jahr + " …");
-          const url = wlanDatei(m.jahr, m.mm);
-          return holePdf(url).then(function(p){ return p ? uebernehmen(lib, p, url) : null; });
-        });
       });
-      return kette;
-    });
-  }).then(function(){
-    if(!Object.keys(next).length){
-      throw new Error("Kein Bericht gefunden · Ordner und Dateiname prüfen · " +
-                      "erwartet wird z. B. 2025-08" + WLAN_QUELLE.endung);
-    }
-    DATA_WLAN = next;
-    return bilanz;
-  });
-}
-
-function blattWlan(keys){
-  /* Profilspalten aus allen gewählten Monaten, stärkstes zuerst. */
-  const summen = {};
-  keys.forEach(function(k){
-    (DATA_WLAN[k].profile || []).forEach(function(p){ summen[p[0]] = (summen[p[0]] || 0) + p[1]; });
-  });
-  const namen = Object.keys(summen).sort(function(a,b){ return summen[b] - summen[a]; });
-  const kopf = ["Monat","Sitzungen","Eindeutige Logins","Verschiedene Geräte (MAC)",
-                "Max. gleichzeitige Nutzer","Max. aktive Sitzungen","Auslastung der Lizenz (%)",
-                "Sitzungen je Gerät"]
-    .concat(namen.map(function(n){ return "Profil " + n; }));
-
-  const zeilen = keys.map(function(k){
-    const d = DATA_WLAN[k], kpi = d.kpi;
-    const leer = function(x){ return hatWert(x) ? x : ""; };
-    const profil = {};
-    (d.profile || []).forEach(function(p){ profil[p[0]] = p[1]; });
-    return [d.label, leer(kpi.sessions), leer(kpi.logins), leer(kpi.devices),
-            leer(kpi.maxConcurrent), leer(kpi.maxActive), leer(kpi.licensePct),
-            hatWert(kpi.sessionsPerDevice) ? Math.round(kpi.sessionsPerDevice * 100) / 100 : ""]
-      .concat(namen.map(function(n){ return profil[n] === undefined ? "" : profil[n]; }));
-  });
-  return [kopf].concat(zeilen);
-}
-
-KANAELE.wlan = {
-  titel: "Bus-WLAN",
-  untertitel: "Nutzung des Fahrgast-WLAN in den Bussen",
-  monatFeld: "monthWlan",
-  einheit: ["Bericht","Berichte"],
-  fehltText: "Im Bericht nicht enthalten",
-  daten:   function(){ return DATA_WLAN; },
-  ordnung: function(){ return Object.keys(DATA_WLAN).sort(); },
-  /* Drei Größenordnungen, die sich leicht verwechseln lassen und
-     deshalb nebeneinander stehen: Sitzungen im ganzen Monat, Sitzungen
-     am stärksten Tag und die höchste Gleichzeitigkeit. Die Auslastung
-     der Lizenz ergibt sich aus der letzten Zahl und steht als Satz
-     unter dem Jahresverlauf. */
-  kpis: [
-    {key:"sessions",          label:"Sitzungen im Monat",        kind:"num"},
-    {key:"maxActive",         label:"Sitzungen am stärksten Tag",kind:"num"},
-    {key:"logins",            label:"Eindeutige Logins",         kind:"num"},
-    {key:"devices",           label:"Verschiedene Geräte",       kind:"num"},
-    {key:"maxConcurrent",     label:"Max. gleichzeitige Nutzer", kind:"num"},
-    {key:"sessionsPerDevice", label:"Sitzungen je Gerät",        kind:"dec"}
-  ],
-  leitKpis: ["sessions","devices","maxConcurrent"],
-  chart: {
-    feld: "chartMetricWlan",
-    klasse: "rechts",
-    metriken: {sessions:"Sitzungen", logins:"Eindeutige Logins", devices:"Geräte"},
-    hinweis: function(label){
-      const cur = DATA_WLAN[state.monthWlan] || {};
-      const kpi = cur.kpi || {};
-      let satz = "Gefüllte Balken = Monate mit hinterlegtem Bericht (" + label + "). " +
-                 "Schraffierte Monate warten noch auf ihren Bericht.";
-      /* Die Auslastung der Lizenz gehört zur Gleichzeitigkeit, nicht zu
-         den Sitzungen — deshalb als Satz statt als eigene Kachel. */
-      if(hatWert(kpi.maxConcurrent) && hatWert(kpi.licensePct)){
-        satz += " Höchste Gleichzeitigkeit: " + fmt(kpi.maxConcurrent) + " Geräte, " +
-                pct(kpi.licensePct) + " der Lizenz" +
-                (hatWert(cur.lizenz) ? " für " + fmt(cur.lizenz) + " Nutzer" : "") + ".";
+    }).then(function(){
+      if(!Object.keys(next).length){
+        throw new Error("Kein Bericht gefunden · Ordner und Dateiname prüfen · " +
+                        "erwartet wird z. B. 2025-08" + WLAN_ENDUNG);
       }
-      return satz;
-    }
-  },
-  zeichnen: renderWlan,
-  holen: wlanHolen,
-  leerTitel: "Bus-WLAN — keine Berichte gefunden",
-  leerText: "Die Kennzahlen stammen aus den Monatsberichten im Ordner " +
-            "fileadmin/user_upload/17_kennzahlen/bus-wlan/. Sobald dort ein Bericht als PDF " +
-            "liegt, erscheinen die Werte hier.",
-  leerStatus: "Keine Berichte gefunden · Bericht als PDF im fileadmin ablegen " +
-              "und auf Aktualisieren klicken",
-  fehlerText: "WLAN-Berichte nicht geladen: ",
-  packen:    function(){ return {daten:DATA_WLAN}; },
-  auspacken: function(o){ DATA_WLAN = o.daten || {}; },
-  exportName: "Bus-WLAN",
-  exportSub:  "Nutzungsstatistik Fahrgast-WLAN",
-  exportBlatt: blattWlan
-};
+      WLAN_DATEN[id] = next;
+      return bilanz;
+    });
+  }
+
+  function blatt(keys){
+    /* Profilspalten aus allen gewählten Monaten, stärkstes zuerst. */
+    const summen = {};
+    keys.forEach(function(k){
+      (daten()[k].profile || []).forEach(function(p){ summen[p[0]] = (summen[p[0]] || 0) + p[1]; });
+    });
+    const namen = Object.keys(summen).sort(function(a,b){ return summen[b] - summen[a]; });
+    const kopf = ["Monat","Sitzungen","Eindeutige Logins","Verschiedene Geräte (MAC)",
+                  "Max. gleichzeitige Nutzer","Max. aktive Sitzungen","Auslastung der Lizenz (%)",
+                  "Sitzungen je Gerät"]
+      .concat(namen.map(function(n){ return "Profil " + n; }));
+
+    const zeilen = keys.map(function(k){
+      const d = daten()[k], kpi = d.kpi;
+      const leer = function(x){ return hatWert(x) ? x : ""; };
+      const profil = {};
+      (d.profile || []).forEach(function(p){ profil[p[0]] = p[1]; });
+      return [d.label, leer(kpi.sessions), leer(kpi.logins), leer(kpi.devices),
+              leer(kpi.maxConcurrent), leer(kpi.maxActive), leer(kpi.licensePct),
+              hatWert(kpi.sessionsPerDevice) ? Math.round(kpi.sessionsPerDevice * 100) / 100 : ""]
+        .concat(namen.map(function(n){ return profil[n] === undefined ? "" : profil[n]; }));
+    });
+    return [kopf].concat(zeilen);
+  }
+
+  const ordnerText = cfg.ordner.replace(/^\//, "");
+  KANAELE[id] = {
+    titel: cfg.titel,
+    untertitel: cfg.untertitel,
+    monatFeld: cfg.monatFeld,
+    einheit: ["Bericht","Berichte"],
+    fehltText: "Im Bericht nicht enthalten",
+    infoGruppe: "wlan",                  /* Erklärtexte der Kacheln teilen sich beide */
+    daten:   daten,
+    ordnung: function(){ return Object.keys(daten()).sort(); },
+    /* Drei Größenordnungen, die sich leicht verwechseln lassen und
+       deshalb nebeneinander stehen: Sitzungen im ganzen Monat, Sitzungen
+       am stärksten Tag und die höchste Gleichzeitigkeit. Die Auslastung
+       der Lizenz ergibt sich aus der letzten Zahl und steht als
+       Messbalken unter den Profilen. */
+    kpis: [
+      {key:"sessions",          label:"Sitzungen im Monat",        kind:"num"},
+      {key:"maxActive",         label:"Sitzungen am stärksten Tag",kind:"num"},
+      {key:"logins",            label:"Eindeutige Logins",         kind:"num"},
+      {key:"devices",           label:"Verschiedene Geräte",       kind:"num"},
+      {key:"maxConcurrent",     label:"Max. gleichzeitige Nutzer", kind:"num"},
+      {key:"sessionsPerDevice", label:"Sitzungen je Gerät",        kind:"dec"}
+    ],
+    leitKpis: ["sessions","devices","maxConcurrent"],
+    chart: {
+      feld: cfg.chartFeld,
+      klasse: "rechts",
+      metriken: {sessions:"Sitzungen", logins:"Eindeutige Logins", devices:"Geräte"},
+      hinweis: function(label){
+        return "Gefüllte Balken = Monate mit hinterlegtem Bericht (" + label + "). " +
+               "Schraffierte Monate warten noch auf ihren Bericht.";
+      }
+    },
+    zeichnen: zeichnen,
+    holen: holen,
+    leerTitel: cfg.titel + " — keine Berichte gefunden",
+    leerText: "Die Kennzahlen stammen aus den Monatsberichten im Ordner " + ordnerText +
+              ". Sobald dort ein Bericht als PDF liegt, erscheinen die Werte hier.",
+    leerStatus: "Keine Berichte gefunden · Bericht als PDF im fileadmin ablegen " +
+                "und auf Aktualisieren klicken",
+    fehlerText: cfg.titel + "-Berichte nicht geladen: ",
+    packen:    function(){ return {daten:daten()}; },
+    auspacken: function(o){ WLAN_DATEN[id] = o.daten || {}; },
+    exportName: cfg.titel,
+    exportSub:  cfg.exportSub,
+    exportBlatt: blatt
+  };
+}
+
+wlanKanal({
+  id: "wlan", titel: "Bus-WLAN",
+  untertitel: "Nutzung des Fahrgast-WLAN in den Bussen",
+  ordner: "/fileadmin/user_upload/17_kennzahlen/bus-wlan/",
+  monatFeld: "monthWlan", chartFeld: "chartMetricWlan",
+  exportSub: "Nutzungsstatistik Fahrgast-WLAN",
+  /* Jedes Fahrzeug meldet sich mit einem eigenen Eingangssubnetz. */
+  rang: {titel:"Meistgenutzte Fahrzeuge", note:"Sitzungen je Fahrzeug",
+         legende:"Jedes Fahrzeug meldet sich mit einem eigenen Netz. Der Bericht listet nur die " +
+                 "stärksten davon auf, die Anteile beziehen sich auf alle Sitzungen des Monats.",
+         leer:"Dieser Bericht enthält keine Aufteilung nach Fahrzeugen."}
+});
+
+wlanKanal({
+  id: "wlancity", titel: "WLAN-City",
+  untertitel: "Nutzung des Fahrgast-WLAN WLAN-City",
+  ordner: "/fileadmin/user_upload/17_kennzahlen/wlan-city/",
+  monatFeld: "monthWlanCity", chartFeld: "chartMetricWlanCity",
+  exportSub: "Nutzungsstatistik Fahrgast-WLAN WLAN-City",
+  /* Der Bericht nennt die Zugänge nur als Eingangssubnetz — was sich
+     dahinter verbirgt, steht nicht darin. Deshalb bleibt es bei dem Begriff. */
+  rang: {titel:"Sitzungen nach Eingangssubnetz", note:"Stärkste Netze des Monats",
+         legende:"Der Bericht listet nur die stärksten Eingangssubnetze auf. Die Anteile " +
+                 "beziehen sich auf alle Sitzungen des Monats.",
+         leer:"Dieser Bericht enthält keine Aufteilung nach Eingangssubnetzen."}
+});
 
 
 /* ============================================================
@@ -4640,6 +5560,7 @@ const KANAL_ICONS = {
   news: '<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/>',
   netz: '<circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M6 8.4v7.2M8.4 6H14a4 4 0 0 1 4 4v5.6"/>',
   wlan: '<path d="M2.5 9a15 15 0 0 1 19 0M6 12.8a10 10 0 0 1 12 0M9.4 16.5a5 5 0 0 1 5.2 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/>',
+  wlancity: '<circle cx="12" cy="10" r="1.6" fill="currentColor" stroke="none"/><path d="M12 12.6v7.9M9 20.5h6"/><path d="M8.9 13.1a4.4 4.4 0 0 1 0-6.2M15.1 6.9a4.4 4.4 0 0 1 0 6.2"/><path d="M6.1 15.9a8.4 8.4 0 0 1 0-11.8M17.9 4.1a8.4 8.4 0 0 1 0 11.8"/>',
   chat: '<path d="M21 12a8 8 0 0 1-8 8H4.5L7 17.2A8 8 0 1 1 21 12Z"/>'
 };
 function iconSvg(id){
@@ -5088,13 +6009,15 @@ function alsPdf(){
 function animate(scope){
   requestAnimationFrame(function(){
     scope.querySelectorAll(".fill").forEach(el => { el.style.height = el.dataset.h + "%"; });
-    scope.querySelectorAll(".barline span, .minibar span, .bahn span").forEach(el => { el.style.width = el.dataset.w + "%"; });
+    /* Alle Balken mit Breitenangabe (Ranglisten, Tabellen, Messbalken) */
+    scope.querySelectorAll("[data-w]").forEach(el => { el.style.width = el.dataset.w + "%"; });
   });
   scope.querySelectorAll("[data-count]").forEach(countUp);
 }
 
 /* still = true: nach dem Nachladen ohne erneute Aufbau-Animation */
 function render(still){
+  infoFenster.schliessen();
   const k = kanalInfo();
   const istUebersicht = state.view === "overview";
   document.getElementById("view-title").textContent =
