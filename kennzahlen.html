@@ -690,6 +690,7 @@
 #bmk-dash .rank{grid-column:span 6}
 #bmk-dash .pages-rank{grid-column:7 / span 6;grid-row:1 / span 2;display:flex;flex-direction:column}
 #bmk-dash .pages-rank ol{flex:1;justify-content:space-between}
+#bmk-dash .pages-rank.kurz ol,#bmk-dash .rank.side-rank.kurz ol{flex:0 0 auto;justify-content:flex-start;gap:20px}
 /* Rangliste rechts neben dem KPI-Raster — genauso hoch wie dessen
    sechs Kacheln zusammen, deshalb nur eine Rasterzeile hoch. */
 #bmk-dash .rank.side-rank{grid-column:7 / span 6;grid-row:1;display:flex;flex-direction:column}
@@ -977,6 +978,8 @@
   #bmk-dash .card{break-inside:avoid;page-break-inside:avoid;border-color:#d5d8e0;
                   transform:none!important;box-shadow:none;animation:none!important}
   #bmk-dash .card:hover{transform:none;box-shadow:none}
+  /* Weiche Schatten landen im PDF als dunkelgraue Flächen */
+  #bmk-dash .kpi-grid .card,#bmk-dash .combo-btn,#bmk-dash .bar .fill{box-shadow:none!important}
   #bmk-dash .grid > *,#bmk-dash .ov > *{animation:none!important}
   #bmk-dash .ov-knopf,#bmk-dash .kwahl{display:none}
   #bmk-dash .kpi-i{display:none}
@@ -1268,10 +1271,20 @@
   #bmk-dash .bob-ring g,#bmk-dash .bob-netz .fahrt{animation:none}
 }
 @media print{
-  #bmk-dash .bob-buehne{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  /* Etwas kleiner, damit die Bühne noch unter die Überschrift auf Seite 1 passt */
+  #bmk-dash .bob-buehne{break-inside:avoid;page-break-inside:avoid;box-shadow:none;zoom:.78}
+  #bmk-dash .bob-unten > .card{break-inside:avoid;page-break-inside:avoid}
+  #bmk-dash .bob-tag{grid-column:1 / span 8}
+  #bmk-dash .bob-mix{grid-column:9 / span 4}
+  /* Die Scheibe hinter Bob wird im PDF sonst unter der Bühne noch einmal gemalt */
+  #bmk-dash .bob-scheibe{display:none}
+  #bmk-dash .bob-buehne.detail-offen .bob-zentrum{left:50%}
+  #bmk-dash .bob.mix-fokus .ring-seg,#bmk-dash .bob.mix-fokus .bob-karte,
+  #bmk-dash .bob.mix-fokus .bt-zeile,#bmk-dash .bob.mix-fokus .bm-liste li{opacity:1!important}
   #bmk-dash .bob-figur canvas{display:none}
   #bmk-dash .bob-figur img{opacity:1!important;transform:none!important}
   #bmk-dash .bob-karte{translate:none!important;animation:none!important}
+  #bmk-dash .bob-karte,#bmk-dash .bob-blase{box-shadow:none!important}
   #bmk-dash .bob-hinweis,#bmk-dash .bob-huelle{display:none!important}
 }
 /* ============================================================
@@ -2202,7 +2215,8 @@ function rangKachel(o){
       '<span class="meta">' + (z.meta || "") + '</span>' +
     '</li>';
   }).join("");
-  return '<div class="card ' + (o.klasse || "rank") + '">' +
+  /* Wenige Zeilen in einer hohen Kachel: nicht über die ganze Höhe verteilen */
+  return '<div class="card ' + (o.klasse || "rank") + (o.zeilen.length < 6 ? " kurz" : "") + '">' +
     '<div class="card-head"><h2>' + esc(o.titel) + '</h2>' +
     '<span class="card-note">' + esc(o.note || "") + '</span></div>' +
     (o.legende ? '<div class="rank-legend">' + esc(o.legende) + '</div>' : '') +
@@ -4286,6 +4300,21 @@ function newsletterZeitverlauf(cur){
   }
 
   if(!out.length){
+    /* Nur ein oder zwei Tageswerte ohne Uhrzeit: für Diagramme zu wenig,
+       die Werte selbst stehen aber im Bericht und werden gezeigt. */
+    if(verlauf.length){
+      const zeilen = verlauf.map(function(t){
+        return '<div><span class="lname">' + esc(nlTagText(t.tag)) + '</span>' +
+          '<span class="lval">' + fmt(t.uOpen) + ' Öffnungen · ' + fmt(t.uClick) + ' Klicks</span></div>';
+      }).join("");
+      return '<div class="card split wide">' +
+        '<div class="card-head"><h2>Zeitverlauf</h2><span class="card-note">' + verlauf.length +
+          (verlauf.length === 1 ? " Tag" : " Tage") + ' im Bericht</span></div>' +
+        '<div class="legend">' + zeilen + '</div>' +
+        '<p class="hint">Der CleverReach-Bericht enthält nur ' + (verlauf.length === 1 ? "einen Tag" : "zwei Tage") +
+          ' ohne Uhrzeiten. Für Monatsverlauf, Tageszeit und Wochentage braucht es einen Export mit dem ganzen ' +
+          'Zeitraum nach dem Versand.</p></div>';
+    }
     return leereKachel("chart full", "Zeitverlauf",
       "Dieser Versandbericht enthält keinen auswertbaren Zeitverlauf der Öffnungen.");
   }
@@ -5494,8 +5523,14 @@ function chatThemen(cur, cmp, cmpLabel){
     leerText: "Für diesen Monat enthält das Blatt nur Anfragen keine Kategorien.",
     zeilen: top.map(function(n){
       const wert = cur.treffer[n] || 0;
+      /* Darunter die stärksten Unterkategorien — so steht auf einen Blick,
+         worum es innerhalb des Themas meistens geht. */
+      const unter = cur.unter[n] || {};
+      const unterTop = Object.keys(unter).filter(function(u){ return u !== CHAT_OHNE; })
+        .sort(function(a,b){ return unter[b] - unter[a]; }).slice(0, 3);
       return {
         name: n,
+        raw: unterTop.length ? unterTop.join(" · ") : "",
         text: fmt(wert),
         anteil: wert / max * 100,
         hover: n + " — " + fmt(wert) + " Kategorie-Zuordnungen",
